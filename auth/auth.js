@@ -34,27 +34,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Simulate login
-            simulateAuth('Logging in...', () => {
-                window.location.href = 'home.html';
+            let user = {email: email, password: password};
+            user = JSON.stringify(user);
+
+            $.ajax({
+                url: 'http://localhost:8082/cms/api/v1/auth/signin',
+                type: 'POST',
+                data: user,
+                headers: { "Content-Type": "application/json" },
+                success: (response) => {
+                    document.cookie = "token=" + response.token;
+                    localStorage.setItem('token', response.token);
+                    window.location.href = 'home.html';
+                },
+                error: (xhr, status, error) => {
+                    console.log(xhr.responseText);
+                }
             });
+
+
         });
     }
 
     if (signupForm) {
         signupForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const fullName = document.getElementById('fullName').value;
+
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
+            const role = document.getElementById('role').value;
+            const code = document.getElementById('code').value;
 
             // Basic validation
-            if (fullName.length < 2) {
-                showError('fullName', 'Please enter your full name');
-                return;
-            }
-
             if (!validateEmail(email)) {
                 showError('email', 'Please enter a valid email address');
                 return;
@@ -70,10 +82,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Simulate signup
-            simulateAuth('Creating your account...', () => {
-                window.location.href = 'home.html';
+            if (role === '') {
+                showError('role', 'Please select a role');
+                return;
+            }
+
+            if (code === '') {
+                showError('code', 'Please enter a code');
+                return;
+            }
+
+            let user = {email: email, password: password, role: role, roleCode: code};
+            user = JSON.stringify(user);
+
+            $.ajax({
+                url: 'http://localhost:8082/cms/api/v1/auth/signup',
+                type: 'POST',
+                data: user,
+                headers: { "Content-Type": "application/json" },
+                success: (response) => {
+                    document.cookie = "token=" + response.token;
+                    localStorage.setItem('token', response.token);
+                    window.location.href = '../home.html';
+                },
+                error: (xhr, status, error) => {
+                    console.log(xhr.responseText);
+                }
             });
+
         });
     }
 
