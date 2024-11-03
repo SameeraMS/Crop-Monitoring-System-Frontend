@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenShadow</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <div class="hamburger">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <nav class="sidebar">
+        <div class="logo">
+            <img src="https://api.iconify.design/mdi:leaf.svg" alt="Logo" class="logo-icon">
+            <span>GreenShadow</span>
+        </div>
+        <ul class="nav-items">
+            <li class="active">
+                <img src="https://api.iconify.design/mdi:view-dashboard.svg" alt="Dashboard">Dashboard
+            </li>
+            <li>
+                <img src="https://api.iconify.design/mdi:account-group.svg" alt="User Management">User Management
+            </li>
+            <li>
+                <img src="https://api.iconify.design/mdi:car.svg" alt="Vehicle">Vehicle
+            </li>
+            <li>
+                <img src="https://api.iconify.design/mdi:tractor.svg" alt="Equipment">Equipment
+            </li>
+            <li>
+                <img src="https://api.iconify.design/mdi:clipboard-text.svg" alt="Logs">Logs
+            </li>
+            <li>
+                <img src="https://api.iconify.design/mdi:account-hard-hat.svg" alt="Staff">Staff
+            </li>
+            <li>
+                <img src="https://api.iconify.design/mdi:sprout.svg" alt="Crop Management">Crop Management
+            </li>
+            <li>
+                <img src="https://api.iconify.design/mdi:terrain.svg" alt="Fields">Fields
+            </li>
+        </ul>
+        <ul class="bottom-nav">
+            <li>
+                <img src="https://api.iconify.design/mdi:cog.svg" alt="Settings">Settings
+            </li>
+            <li class="logout" id="logout">
+                <img src="https://api.iconify.design/mdi:logout.svg" alt="Logout">Logout
+            </li>
+        </ul>
+    </nav>
+    <main class="main-content">
+        <header>
+            <div class="search-bar">
+                <input type="text" placeholder="Search something here...">
+                <img src="https://api.iconify.design/mdi:bell.svg" alt="Notifications" class="notification-icon">
+            </div>
+            <div class="user-profile">
+                <img src="https://api.iconify.design/mdi:account-circle.svg" alt="Profile" class="profile-icon">
+                <span>Albert Flores</span>
+            </div>
+        </header>
+        <div class="weather-container">
+            <div class="greeting">
+                <div>
+                    <h1>Good Morning!</h1>
+                    <p>Optimize Your Farm Operation with Real-Time Insights</p>
+                </div>
+                <button class="export-btn">Export</button>
+            </div>
+            <div class="current-weather">
+                <div class="weather-header">
+                    <div class="date-info">
+                        <h2>Sunday</h2>
+                        <p>27 Aug, 2024</p>
+                    </div>
+                    <div class="temperature">
+                        <img src="https://api.iconify.design/mdi:weather-sunny.svg" alt="Weather" class="weather-icon">
+                        <span>28°C</span>
+                    </div>
+                </div>
+                <div class="weather-details">
+                    <div class="detail-item">
+                        <h3>Wind Status</h3>
+                        <p>7.90 km/h</p>
+                        <span>9:00 AM</span>
+                    </div>
+                    <div class="detail-item">
+                        <h3>Humidity</h3>
+                        <p>85%</p>
+                        <span>Humidity is good</span>
+                    </div>
+                    <div class="detail-item">
+                        <h3>UV Index</h3>
+                        <p>4 uv</p>
+                        <span>Moderate UV</span>
+                    </div>
+                    <div class="detail-item">
+                        <h3>Visibility</h3>
+                        <p>5 km</p>
+                        <span>9:00 AM</span>
+                    </div>
+                </div>
+            </div>
+            <div class="forecast">
+                <h2>10 Day Forecast</h2>
+                <div class="forecast-items" id="forecast-container"></div>
+            </div>
+        </div>
+    </main>
+</div>
+<script src="script.js"></script>
+<script src="home.js"></script>
+</body>
+</html>
