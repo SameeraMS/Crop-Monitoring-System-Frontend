@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenShadow</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="../vehicle/vehicle.css">
+    <link rel="stylesheet" href="../equipment/equipment.css">
+</head>
+<body>
+<div class="container">
+    <div class="hamburger">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <nav class="sidebar">
+        <div class="logo">
+            <img src="https://api.iconify.design/mdi:leaf.svg" alt="Logo" class="logo-icon">
+            <span style="color: #0D9F4F">GreenShadow</span>
+        </div>
+        <ul class="nav-items">
+            <li class="active" id="dashboard_nav">
+                <img src="https://api.iconify.design/mdi:view-dashboard.svg" alt="Dashboard">Dashboard
+            </li>
+            <li id="vehicle_nav">
+                <img src="https://api.iconify.design/mdi:car.svg" alt="Vehicle">Vehicle
+            </li>
+            <li id="equipment_nav">
+                <img src="https://api.iconify.design/mdi:tractor.svg" alt="Equipment">Equipment
+            </li>
+            <li id="log_nav">
+                <img src="https://api.iconify.design/mdi:clipboard-text.svg" alt="Logs">Logs
+            </li>
+            <li id="staff_nav">
+                <img src="https://api.iconify.design/mdi:account-hard-hat.svg" alt="Staff">Staff
+            </li>
+            <li id="crop_nav">
+                <img src="https://api.iconify.design/mdi:sprout.svg" alt="Crop Management">Crop Management
+            </li>
+            <li id="fields_nav">
+                <img src="https://api.iconify.design/mdi:terrain.svg" alt="Fields">Fields
+            </li>
+        </ul>
+        <ul class="bottom-nav">
+            <li id="settings_nav">
+                <img src="https://api.iconify.design/mdi:cog.svg" alt="Settings">Settings
+            </li>
+            <li class="logout" id="logout">
+                <img src="https://api.iconify.design/mdi:logout.svg" alt="Logout">Logout
+            </li>
+        </ul>
+    </nav>
+    <main class="main-content">
+
+        <header>
+            <div class="search-bar">
+                <input type="text" placeholder="Search something here...">
+                <img src="https://api.iconify.design/mdi:bell.svg" alt="Notifications" class="notification-icon">
+            </div>
+            <div class="user-profile">
+                <img src="https://api.iconify.design/mdi:account-circle.svg" alt="Profile" class="profile-icon">
+                <span>Albert Flores</span>
+            </div>
+        </header>
+
+        <!-- dashboard -->
+        <div id="dashboard" class="weather-container">
+            <div class="greeting">
+                <div>
+                    <h1>Good Morning!</h1>
+                    <p>Optimize Your Farm Operation with Real-Time Insights</p>
+                </div>
+                <button class="export-btn">Export</button>
+            </div>
+            <div class="current-weather">
+                <div class="weather-header">
+                    <div class="date-info">
+                        <h2>Sunday</h2>
+                        <p>27 Aug, 2024</p>
+                    </div>
+                    <div class="temperature">
+                        <img src="https://api.iconify.design/mdi:weather-sunny.svg" alt="Weather" class="weather-icon">
+                        <span>28°C</span>
+                    </div>
+                </div>
+                <div class="weather-details">
+                    <div class="detail-item">
+                        <h3>Wind Status</h3>
+                        <p>7.90 km/h</p>
+                        <span>9:00 AM</span>
+                    </div>
+                    <div class="detail-item">
+                        <h3>Humidity</h3>
+                        <p>85%</p>
+                        <span>Humidity is good</span>
+                    </div>
+                    <div class="detail-item">
+                        <h3>UV Index</h3>
+                        <p>4 uv</p>
+                        <span>Moderate UV</span>
+                    </div>
+                    <div class="detail-item">
+                        <h3>Visibility</h3>
+                        <p>5 km</p>
+                        <span>9:00 AM</span>
+                    </div>
+                </div>
+            </div>
+            <div class="forecast">
+                <h2>10 Day Forecast</h2>
+                <div class="forecast-items" id="forecast-container"></div>
+            </div>
+        </div>
+
+        <!-- vehicle -->
+        <div id="vehicle_management" class="vehicle-management-container">
+            <div class="greeting">
+                <div>
+                    <h1>Manage Vehicles</h1>
+                    <p>Add, update, or delete vehicle information.</p>
+                </div>
+            </div>
+
+            <!-- Vehicle Form -->
+            <div class="vehicle-form">
+                <h2>Add/Update Vehicle</h2>
+                <form id="vehicle-form">
+                    <div class="form-group">
+                        <label for="licenNo">License Number:</label>
+                        <input type="text" id="licenNo" placeholder="Enter license number" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <input type="text" id="category" placeholder="Enter vehicle category" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="fuelType">Fuel Type:</label>
+                        <input type="text" id="fuelType" placeholder="Enter fuel type" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="vehicleStatus">Vehicle Status:</label>
+                        <select id="vehicleStatus">
+                            <option value="AVAILABLE">AVAILABLE</option>
+                            <option value="UNAVAILABLE">UNAVAILABLE</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="staffId">Staff ID:</label>
+                        <select id="staffId">
+                            <!-- Add staff options dynamically here -->
+                            <option value="1">Staff 1</option>
+                            <option value="2">Staff 2</option>
+                            <option value="3">Staff 3</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="remark">Remark:</label>
+                        <textarea id="remark" placeholder="Enter remark"></textarea>
+                    </div>
+                    <button type="submit" class="add-btn">Save Vehicle</button>
+                </form>
+            </div>
+
+            <!-- Vehicle Table -->
+            <div class="vehicle-table">
+                <h2>Vehicle List</h2>
+                <table id="vehicle-list">
+                    <thead>
+                    <tr>
+                        <th>Vehicle ID</th>
+                        <th>License No</th>
+                        <th>Category</th>
+                        <th>Fuel Type</th>
+                        <th>Status</th>
+                        <th>Staff ID</th>
+                        <th>Remark</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="equipment_management" class="equipment-management-container">
+            <div class="greeting">
+                <div>
+                    <h1>Manage Equipments</h1>
+                    <p>Add, update, or delete equipment information.</p>
+                </div>
+            </div>
+            <!-- Equipment Form -->
+            <div class="equipment-form">
+                <h2>Add/Update Equipment</h2>
+                <form id="equipment-form">
+                    <div class="form-group">
+                        <label for="equipmentId">Equipment ID:</label>
+                        <input type="text" id="equipmentId" placeholder="Enter equipment ID" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="equipmentName">Equipment Name:</label>
+                        <input type="text" id="equipmentName" placeholder="Enter equipment name" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="equipmentType">Equipment Type:</label>
+                        <select id="equipmentType">
+                            <option value="ELECTRICAL">ELECTRICAL</option>
+                            <option value="MECHANICAL">MECHANICAL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="equipmentStatus">Equipment Status:</label>
+                        <select id="equipmentStatus">
+                            <option value="AVAILABLE">AVAILABLE</option>
+                            <option value="UNAVAILABLE">UNAVAILABLE</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="staffIdOnEquipment">Staff:</label>
+                        <select id="staffIdOnEquipment">
+                            <!-- Add staff options dynamically -->
+                            <option value="1">Staff 1</option>
+                            <option value="2">Staff 2</option>
+                            <option value="3">Staff 3</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fieldId">Field:</label>
+                        <select id="fieldId">
+                            <!-- Add field options dynamically -->
+                            <option value="1">Field 1</option>
+                            <option value="2">Field 2</option>
+                            <option value="3">Field 3</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="add-btn">Save Equipment</button>
+                </form>
+            </div>
+
+            <!-- Equipment Table -->
+            <div class="equipment-table">
+                <h2>Equipment List</h2>
+                <table id="equipment-list">
+                    <thead>
+                    <tr>
+                        <th>Equipment ID</th>
+                        <th>Equipment Name</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Staff</th>
+                        <th>Field</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+
+
+    </main>
+</div>
+<script src="../assets/lib/jquery.min.js"></script>
+<script src="../script.js"></script>
+<script src="home.js"></script>
+<script src="../vehicle/vehicle.js"></script>
+<script src="../equipment/equipment.js"></script>
+<script src="../navigation.js"></script>
+</body>
+</html>

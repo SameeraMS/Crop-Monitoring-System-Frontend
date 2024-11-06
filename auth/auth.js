@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 success: (response) => {
                     document.cookie = "token=" + response.token;
                     localStorage.setItem('token', response.token);
-                    window.location.href = '../home.html';
+                    window.location.href = '../home/home.html';
                 },
                 error: (xhr, status, error) => {
                     console.log(xhr.responseText);
