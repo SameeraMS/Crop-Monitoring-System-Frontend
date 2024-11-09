@@ -29,13 +29,13 @@ function addEquipmentToTable(equipment) {
     const row = document.createElement('tr');
 
     row.innerHTML = `
-        <td>${equipment.equipmentId}</td>
         <td>${equipment.equipmentName}</td>
         <td>${equipment.equipmentType}</td>
         <td>${equipment.equipmentStatus}</td>
         <td>${equipment.staffId}</td>
         <td>${equipment.fieldId}</td>
-        <td><button class="delete-btn" onclick="deleteEquipment(this)">Delete</button></td>
+        <td><button value=${equipment.equipmentId} class="edit-btn" onclick="editEquipment(this)">Edit</button></td>
+        <td><button value=${equipment.equipmentId} class="delete-btn" onclick="deleteEquipment(this)">Delete</button></td>
     `;
 
     tableBody.appendChild(row);

@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="../vehicle/vehicle.css">
     <link rel="stylesheet" href="../equipment/equipment.css">
+    <link rel="stylesheet" href="../log/log.css">
+    <link rel="stylesheet" href="../staff/staff.css">
+    <link rel="stylesheet" href="../crop/crop.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
 <div class="container">
@@ -18,7 +22,7 @@
     </div>
     <nav class="sidebar">
         <div class="logo">
-            <img src="https://api.iconify.design/mdi:leaf.svg" alt="Logo" class="logo-icon">
+            <i class="fas fa-leaf"></i>
             <span style="color: #0D9F4F">GreenShadow</span>
         </div>
         <ul class="nav-items">
@@ -170,13 +174,13 @@
                 <table id="vehicle-list">
                     <thead>
                     <tr>
-                        <th>Vehicle ID</th>
                         <th>License No</th>
                         <th>Category</th>
                         <th>Fuel Type</th>
                         <th>Status</th>
                         <th>Staff ID</th>
                         <th>Remark</th>
+                        <th>Edit</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -185,6 +189,7 @@
             </div>
         </div>
 
+        <!-- equipment -->
         <div id="equipment_management" class="equipment-management-container">
             <div class="greeting">
                 <div>
@@ -246,13 +251,13 @@
                 <table id="equipment-list">
                     <thead>
                     <tr>
-                        <th>Equipment ID</th>
                         <th>Equipment Name</th>
                         <th>Type</th>
                         <th>Status</th>
                         <th>Staff</th>
                         <th>Field</th>
-                        <th>Actions</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                     </thead>
                     <tbody></tbody>
@@ -261,6 +266,226 @@
 
         </div>
 
+        <!-- Log Management -->
+        <div id="log_management" class="log-management-container">
+            <div class="greeting">
+                <div>
+                    <h1>Manage Logs</h1>
+                    <p>Add, update, or delete log information.</p>
+                </div>
+            </div>
+            <!-- Log Form -->
+            <div class="log-form">
+                <h2>Add/Update Log</h2>
+                <form id="log-form">
+                    <div class="form-group">
+                        <label for="logId">Log ID:</label>
+                        <input type="text" id="logId" placeholder="Enter log ID" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="logDate">Log Date:</label>
+                        <input type="date" id="logDate" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="logDetails">Log Details:</label>
+                        <textarea id="logDetails" placeholder="Enter log details" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="logImage">Log Image:</label>
+                        <input type="file" id="logImage" />
+                    </div>
+                    <button type="submit" class="add-btn">Save Log</button>
+                </form>
+            </div>
+
+            <!-- Log Table -->
+            <div class="log-table">
+                <h2>Log List</h2>
+                <table id="log-list">
+                    <thead>
+                    <tr>
+                        <th>Log ID</th>
+                        <th>Date</th>
+                        <th>Details</th>
+                        <th>Image</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Staff Management -->
+        <div id="staff_management" class="staff-management-container">
+            <div class="greeting">
+                <div>
+                    <h1>Manage Staff</h1>
+                    <p>Add, update, or delete staff information.</p>
+                </div>
+            </div>
+            <!-- Staff Form -->
+            <div class="staff-form">
+                <h2>Add/Update Staff</h2>
+                <form id="staff-form">
+                    <div class="form-group">
+                        <label for="firstName">First Name:</label>
+                        <input type="text" id="firstName" placeholder="Enter first name" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name:</label>
+                        <input type="text" id="lastName" placeholder="Enter last name" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="designation">Designation:</label>
+                        <input type="text" id="designation" placeholder="Enter designation" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender:</label>
+                        <select id="gender">
+                            <option value="MALE">Male</option>
+                            <option value="FEMALE">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="joinedDate">Joined Date:</label>
+                        <input type="date" id="joinedDate" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="dob">Date of Birth:</label>
+                        <input type="date" id="dob" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="buildingNo">Building No:</label>
+                        <input type="text" id="buildingNo" placeholder="Enter building number" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="lane">Lane:</label>
+                        <input type="text" id="lane" placeholder="Enter lane" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City:</label>
+                        <input type="text" id="city" placeholder="Enter city" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State:</label>
+                        <input type="text" id="state" placeholder="Enter state" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="postalcode">Postal Code:</label>
+                        <input type="text" id="postalcode" placeholder="Enter postal code" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="contactNo">Contact No:</label>
+                        <input type="text" id="contactNo" placeholder="Enter contact number" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" placeholder="Enter email" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role:</label>
+                        <select id="role">
+                            <option value="MANAGER">Manager</option>
+                            <option value="ADMINISTRATIVE">Administrative</option>
+                            <option value="SCIENTIST">Scientist</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="logIdStaff">Log ID:</label>
+                        <input type="text" id="logIdStaff" placeholder="Enter log ID" />
+                    </div>
+                    <button type="submit" class="add-btn">Save Staff</button>
+                </form>
+            </div>
+
+            <!-- Staff Table -->
+            <div class="staff-table">
+                <h2>Staff List</h2>
+                <table id="staff-list">
+                    <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Designation</th>
+                        <th>Contact No</th>
+                        <th>Email</th>
+                        <th>City</th>
+                        <th>Role</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Crop Management -->
+        <div id="crop_management" class="crop-management-container">
+            <div class="greeting">
+                <div>
+                    <h1>Manage Crops</h1>
+                    <p>Add, update, or delete crop information.</p>
+                </div>
+            </div>
+            <!-- Crop Form -->
+            <div class="crop-form">
+                <h2>Add/Update Crop</h2>
+                <form id="crop-form">
+                    <div class="form-group">
+                        <label for="commonName">Common Name:</label>
+                        <input type="text" id="commonName" placeholder="Enter common name" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="scientificName">Scientific Name:</label>
+                        <input type="text" id="scientificName" placeholder="Enter scientific name" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="cropImg">Crop Image URL:</label>
+                        <input type="text" id="cropImg" placeholder="Enter crop image URL" />
+                    </div>
+                    <div class="form-group">
+                        <label for="cropCategory">Category:</label>
+                        <input type="text" id="cropCategory" placeholder="Enter crop category" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="cropSeason">Crop Season:</label>
+                        <input type="text" id="cropSeason" placeholder="Enter crop season" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="fieldIdOnCrop">Field ID:</label>
+                        <input type="text" id="fieldIdOnCrop" placeholder="Enter field ID" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="logIdOnCrop">Log ID:</label>
+                        <input type="text" id="logIdOnCrop" placeholder="Enter log ID" />
+                    </div>
+                    <button type="submit" class="add-btn">Save Crop</button>
+                </form>
+            </div>
+
+            <!-- Crop Table -->
+            <div class="crop-table">
+                <h2>Crop List</h2>
+                <table id="crop-list">
+                    <thead>
+                    <tr>
+                        <th>Common Name</th>
+                        <th>Scientific Name</th>
+                        <th>Category</th>
+                        <th>Crop Season</th>
+                        <th>Field ID</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
 
 
 
@@ -271,6 +496,9 @@
 <script src="home.js"></script>
 <script src="../vehicle/vehicle.js"></script>
 <script src="../equipment/equipment.js"></script>
+<script src="../log/log.js"></script>
+<script src="../staff/staff.js"></script>
+<script src="../crop/crop.js"></script>
 <script src="../navigation.js"></script>
 </body>
 </html>
