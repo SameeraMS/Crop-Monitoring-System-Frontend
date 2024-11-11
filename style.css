@@ -17,6 +17,7 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     min-height: 100vh;
+    overflow-x: hidden;!important;
 }
 
 .container {
@@ -188,6 +189,7 @@ header {
 
     .main-content {
         margin-left: 0;
+        width: 100vw;
     }
 
     .hamburger {
@@ -213,19 +215,25 @@ header {
 }
 
 @media (max-width: 768px) {
+    .main-content {
+        width: 100vw;
+    }
+
     .search-bar {
         display: none;
     }
 
     .user-profile {
         margin-left: auto;
-        margin-right: 4rem;
+        margin-right: 0;
     }
 }
 
 @media (max-width: 480px) {
     .main-content {
         padding: 1rem;
+        width: 100vw;
+
     }
 
 

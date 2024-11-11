@@ -1,19 +1,19 @@
-/* Log Management Styles */
-.log-management-container {
+/* Field Management Styles */
+.field-management-container {
     background: white;
     border-radius: var(--border-radius);
     padding: 2rem;
     margin-bottom: 2rem;
 }
 
-.log-form, .log-table {
+.field-form, .field-table {
     background: var(--bg-color);
     border-radius: var(--border-radius);
     padding: 2rem;
     margin-bottom: 2rem;
 }
 
-.log-form h2, .log-table h2 {
+.field-form h2, .field-table h2 {
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
 }
@@ -28,18 +28,14 @@
     font-weight: 500;
 }
 
-.form-group input, .form-group select, .form-group textarea {
+.form-group input {
     width: 100%;
     padding: 0.8rem;
     border: 1px solid #ccc;
     border-radius: var(--border-radius);
 }
 
-textarea {
-    resize: vertical;
-}
-
-.add-btn, .update-btn{
+.add-btn {
     background: var(--primary-color);
     color: white;
     border: none;
@@ -50,26 +46,26 @@ textarea {
     transition: background-color 0.3s ease;
 }
 
-.add-btn, .update-btn:hover {
+.add-btn:hover {
     background-color: #0b8a43;
 }
 
-.log-table table {
+.field-table table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.log-table table th, .log-table table td {
+.field-table table th, .field-table table td {
     padding: 1rem;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
 
-.log-table table th {
+.field-table table th {
     background: #f5f5f5;
 }
 
-.log-table .delete-btn {
+.field-table .delete-btn {
     background: #ff4d4f;
     color: white;
     border: none;
@@ -78,6 +74,6 @@ textarea {
     cursor: pointer;
 }
 
-.log-table .delete-btn:hover {
+.field-table .delete-btn:hover {
     background: #ff2a2a;
 }
