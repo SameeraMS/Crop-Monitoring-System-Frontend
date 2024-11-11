@@ -1,9 +1,11 @@
+import { initializeStaff } from "../staff/staff.js";
 
-initialize();
+initializeLog();
 
-function initialize() {
+function initializeLog() {
     loadLogTable()
     clearForm()
+    initializeStaff()
 }
 
 document.getElementById('log-form').addEventListener('submit', function(e) {
@@ -35,7 +37,7 @@ document.getElementById('log-form').addEventListener('submit', function(e) {
             console.log(res);
             var logId = res.logId;
             saveImage(logId, image);
-            initialize()
+            initializeLog()
         },
         error: (res) => {
             console.error(res);
@@ -64,12 +66,14 @@ function saveImage(logId, image) {
             },
             success: (res) => {
                 console.log(res);
-                initialize()
+                initializeLog()
             },
             error: (res) => {
                 console.error(res);
             }
         });
+    } else {
+        initializeLog()
     }
 
 }
@@ -82,6 +86,7 @@ function loadLogTable() {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
+            $('#log-list tbody').empty();
             res.forEach(log => {
                 addLogToTable(log);
             });
@@ -96,7 +101,7 @@ function addLogToTable(log) {
     const tableBody = document.querySelector('#log-list tbody');
     const row = document.createElement('tr');
 
-    log.logDate = log.logDate.substring(0, 10);
+    log.logDate = log.logDate.split('T')[0];
 
     const base64String = "data:image/jpeg;base64," + log.image;
     const base64Data = base64String.split(',')[1];
@@ -115,8 +120,6 @@ function addLogToTable(log) {
     const img = document.createElement('img');
     img.src = url;
     img.width = '50px';
-
-
 
     row.innerHTML = `
         <td>${log.logId}</td>
@@ -141,7 +144,7 @@ function deleteLog(button) {
         },
         success: (res) => {
             console.log(res);
-            initialize()
+            initializeLog()
         },
         error: (res) => {
             console.error(res);
@@ -175,6 +178,8 @@ $('#updateLogBtn').on('click', () => {
         logDetails
     };
 
+    console.log(updateLogId);
+
     $.ajax({
         url: "http://localhost:8082/cms/api/v1/logs/" + updateLogId,
         type: "PUT",
@@ -186,7 +191,7 @@ $('#updateLogBtn').on('click', () => {
         success: (res) => {
             console.log(res);
             saveImage(updateLogId, image);
-            initialize()
+            initializeLog()
         },
         error: (res) => {
             console.error(res);
@@ -196,4 +201,9 @@ $('#updateLogBtn').on('click', () => {
 
 function clearForm() {
     document.getElementById('log-form').reset();
+    $('#updateLogBtn').css('display', 'none');
 }
+
+$('#clearLogBtn').on('click', () => {
+    clearForm();
+});

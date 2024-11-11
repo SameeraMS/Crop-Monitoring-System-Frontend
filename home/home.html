@@ -288,7 +288,9 @@
                         <input type="file" id="logImage" />
                     </div>
                     <button id="saveLogBtn" type="submit" class="add-btn">Save Log</button>
-                    <button id="updateLogBtn" type="submit" class="update-btn" style="display: none;">Update Log</button>
+                    <button id="updateLogBtn" type="button" class="update-btn" style="display: none;">Update Log</button>
+                    <button id="clearLogBtn" type="button" class="add-btn">Clear</button>
+
                 </form>
             </div>
 
@@ -389,9 +391,12 @@
                     </div>
                     <div class="form-group">
                         <label for="logIdStaff">Log ID:</label>
-                        <input type="text" id="logIdStaff" placeholder="Enter log ID" />
+                        <select id="logIdStaff">
+                        </select>
                     </div>
-                    <button type="submit" class="add-btn">Save Staff</button>
+                    <button id="saveStaffBtn" type="submit" class="add-btn">Save Staff</button>
+                    <button id="updateStaffBtn" type="button" class="add-btn" style="display: none;">Update Staff</button>
+                    <button id="clearStaffBtn" type="button" class="add-btn">Clear</button>
                 </form>
             </div>
 
@@ -401,12 +406,9 @@
                 <table id="staff-list">
                     <thead>
                     <tr>
+                        <th>Staff Id</th>
                         <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Designation</th>
-                        <th>Contact No</th>
                         <th>Email</th>
-                        <th>City</th>
                         <th>Role</th>
                         <th>Edit</th>
                         <th>Delete</th>
@@ -550,8 +552,8 @@
 <script src="home.js"></script>
 <script src="../vehicle/vehicle.js"></script>
 <script src="../equipment/equipment.js"></script>
-<script src="../log/log.js"></script>
-<script src="../staff/staff.js"></script>
+<script  type="module" src="../log/log.js"></script>
+<script  type="module" src="../staff/staff.js"></script>
 <script src="../crop/crop.js"></script>
 <script src="../field/field.js"></script>
 <script src="../navigation.js"></script>
