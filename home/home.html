@@ -223,22 +223,16 @@
                     <div class="form-group">
                         <label for="staffIdOnEquipment">Staff:</label>
                         <select id="staffIdOnEquipment">
-                            <!-- Add staff options dynamically -->
-                            <option value="1">Staff 1</option>
-                            <option value="2">Staff 2</option>
-                            <option value="3">Staff 3</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="fieldId">Field:</label>
-                        <select id="fieldId">
-                            <!-- Add field options dynamically -->
-                            <option value="1">Field 1</option>
-                            <option value="2">Field 2</option>
-                            <option value="3">Field 3</option>
+                        <label for="fieldIdOnEquipment">Field:</label>
+                        <select id="fieldIdOnEquipment">
                         </select>
                     </div>
-                    <button type="submit" class="add-btn">Save Equipment</button>
+                    <button id="saveEquipmentBtn" type="submit" class="add-btn">Save Equipment</button>
+                    <button id="updateEquipmentBtn" type="button" class="add-btn" style="display: none;">Update Equipment</button>
+                    <button id="clearEquipmentBtn" type="button" class="add-btn">Clear</button>
                 </form>
             </div>
 
@@ -248,8 +242,8 @@
                 <table id="equipment-list">
                     <thead>
                     <tr>
-                        <th>Equipment Name</th>
-                        <th>Type</th>
+                        <th>Equipment Id</th>
+                        <th>Name</th>
                         <th>Status</th>
                         <th>Staff</th>
                         <th>Field</th>
