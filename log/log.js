@@ -1,11 +1,9 @@
-import { initializeStaff } from "../staff/staff.js";
 
 initializeLog();
 
 function initializeLog() {
     loadLogTable()
     clearForm()
-    initializeStaff()
 }
 
 document.getElementById('log-form').addEventListener('submit', function(e) {

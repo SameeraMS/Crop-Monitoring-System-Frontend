@@ -143,7 +143,10 @@
                     </div>
                     <div class="form-group">
                         <label for="fuelType">Fuel Type:</label>
-                        <input type="text" id="fuelType" placeholder="Enter fuel type" required />
+                        <select id="fuelType">
+                            <option value="Petrol">Petrol</option>
+                            <option value="Diesel">Diesel</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="vehicleStatus">Vehicle Status:</label>
@@ -153,19 +156,17 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="staffId">Staff ID:</label>
-                        <select id="staffId">
-                            <!-- Add staff options dynamically here -->
-                            <option value="1">Staff 1</option>
-                            <option value="2">Staff 2</option>
-                            <option value="3">Staff 3</option>
+                        <label for="staffIdOnVehicle">Staff ID:</label>
+                        <select id="staffIdOnVehicle">
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="remark">Remark:</label>
                         <textarea id="remark" placeholder="Enter remark"></textarea>
                     </div>
-                    <button type="submit" class="add-btn">Save Vehicle</button>
+                    <button id="saveVehicleBtn" type="submit" class="add-btn">Save Vehicle</button>
+                    <button id="updateVehicleBtn" type="button" class="add-btn" style="display: none;">Update Vehicle</button>
+                    <button id="clearVehicleBtn" type="button" class="add-btn">Clear</button>
                 </form>
             </div>
 
@@ -175,12 +176,11 @@
                 <table id="vehicle-list">
                     <thead>
                     <tr>
-                        <th>License No</th>
+                        <th>Vehicle Id</th>
                         <th>Category</th>
                         <th>Fuel Type</th>
                         <th>Status</th>
-                        <th>Staff ID</th>
-                        <th>Remark</th>
+                        <th>Staff Id</th>
                         <th>Edit</th>
                         <th>Actions</th>
                     </tr>
@@ -552,8 +552,8 @@
 <script src="home.js"></script>
 <script src="../vehicle/vehicle.js"></script>
 <script src="../equipment/equipment.js"></script>
-<script  type="module" src="../log/log.js"></script>
-<script  type="module" src="../staff/staff.js"></script>
+<script src="../log/log.js"></script>
+<script src="../staff/staff.js"></script>
 <script src="../crop/crop.js"></script>
 <script src="../field/field.js"></script>
 <script src="../navigation.js"></script>

@@ -1,6 +1,6 @@
 initializeStaff()
 
-export function initializeStaff() {
+ function initializeStaff() {
     loadStaffTable()
     loadLogIds()
     clearStaffForm()
