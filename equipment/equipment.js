@@ -68,6 +68,7 @@ function loadEquipmentTable() {
             res.forEach(equipment => {
                 addEquipmentToTable(equipment);
             });
+            new DataTable("#equipment-list", {paging: false, pageLength: 100, destroy: false});
         },
         error: (res) => {
             console.error(res);

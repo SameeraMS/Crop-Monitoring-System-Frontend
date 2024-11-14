@@ -18,6 +18,7 @@ function loadStaffTable() {
             res.forEach(staff => {
                 addStaffToTable(staff);
             });
+            new DataTable("#staff-list", {paging: false, pageLength: 100, destroy: false});
         },
         error: (res) => {
             console.error(res);

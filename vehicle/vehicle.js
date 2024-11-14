@@ -1,4 +1,5 @@
 
+
 initializeVehicle();
 
 function initializeVehicle() {
@@ -49,6 +50,7 @@ function loadVehicleTable() {
             res.forEach(vehicle => {
                 addVehicleToTable(vehicle);
             });
+            new DataTable("#vehicle-list", {paging: false, pageLength: 100, destroy: false});
         },
         error: (res) => {
             console.error(res);
@@ -114,6 +116,7 @@ function addVehicleToTable(vehicle) {
 
     tableBody.appendChild(row);
 }
+
 
 function deleteVehicle(button) {
     const row = button.parentElement.parentElement;

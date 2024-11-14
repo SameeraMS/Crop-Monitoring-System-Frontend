@@ -88,6 +88,7 @@ function loadLogTable() {
             res.forEach(log => {
                 addLogToTable(log);
             });
+            new DataTable("#log-list", {paging: false, pageLength: 100, destroy: false});
         },
         error: (res) => {
             console.error(res);
