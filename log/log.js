@@ -102,22 +102,10 @@ function addLogToTable(log) {
 
     log.logDate = log.logDate.split('T')[0];
 
-    const base64String = "data:image/jpeg;base64," + log.image;
-    const base64Data = base64String.split(',')[1];
-    const binaryString = window.atob(base64Data);
-
-    const len = binaryString.length;
-    const bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-    }
-
-    const blob = new Blob([bytes], { type: 'image/png' });
-
-    const  url = URL.createObjectURL(blob);
+    let base64ImageUrl = "data:image/png;base64," + log.logImage;
 
     const img = document.createElement('img');
-    img.src = url;
+    img.src = base64ImageUrl;
     img.width = '50px';
 
     row.innerHTML = `

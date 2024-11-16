@@ -389,6 +389,11 @@
                         <select id="logIdStaff">
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="fieldIdOnStaff">Field ID:</label>
+                        <select id="fieldIdOnStaff">
+                        </select>
+                    </div>
                     <button id="saveStaffBtn" type="submit" class="add-btn">Save Staff</button>
                     <button id="updateStaffBtn" type="button" class="add-btn" style="display: none;">Update Staff</button>
                     <button id="clearStaffBtn" type="button" class="add-btn">Clear</button>
@@ -435,8 +440,8 @@
                         <input type="text" id="scientificName" placeholder="Enter scientific name" required />
                     </div>
                     <div class="form-group">
-                        <label for="cropImg">Crop Image URL:</label>
-                        <input type="text" id="cropImg" placeholder="Enter crop image URL" />
+                        <label for="cropImg">Crop Image:</label>
+                        <input type="file" id="cropImg"/>
                     </div>
                     <div class="form-group">
                         <label for="cropCategory">Category:</label>
@@ -448,13 +453,17 @@
                     </div>
                     <div class="form-group">
                         <label for="fieldIdOnCrop">Field ID:</label>
-                        <input type="text" id="fieldIdOnCrop" placeholder="Enter field ID" required />
+                        <select id="fieldIdOnCrop">
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="logIdOnCrop">Log ID:</label>
-                        <input type="text" id="logIdOnCrop" placeholder="Enter log ID" />
+                        <select id="logIdOnCrop">
+                        </select>
                     </div>
-                    <button type="submit" class="add-btn">Save Crop</button>
+                    <button id="saveCropBtn" type="submit" class="add-btn">Save Crop</button>
+                    <button id="updateCropBtn" type="button" class="add-btn" style="display: none;">Update Crop</button>
+                    <button id="clearCropBtn" type="button" class="add-btn">Clear</button>
                 </form>
             </div>
 

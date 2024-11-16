@@ -3,8 +3,37 @@ initializeStaff()
  function initializeStaff() {
     loadStaffTable()
     loadLogIds()
+    loadFieldIds()
     clearStaffForm()
 }
+
+function loadFieldIds() {
+
+    $.ajax({
+        url: "http://localhost:8082/cms/api/v1/fields",
+        type: "GET",
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('token')
+        },
+        success: (res) => {
+            console.log(res);
+            const fieldIds = res.map(field => field.fieldId);
+            const fieldIdSelect = document.getElementById('fieldIdOnStaff');
+            $('#fieldIdOnStaff').empty();
+            $('#fieldIdOnStaff').append('<option selected>Select Field</option>');
+            fieldIds.forEach(fieldId => {
+                const option = document.createElement('option');
+                option.value = fieldId;
+                option.text = fieldId;
+                fieldIdSelect.appendChild(option);
+            });
+        },
+        error: (res) => {
+            console.error(res);
+        }
+    });
+}
+
 
 function loadStaffTable() {
     $.ajax({
