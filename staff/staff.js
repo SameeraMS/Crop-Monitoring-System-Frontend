@@ -100,9 +100,14 @@ document.getElementById('staff-form').addEventListener('submit', function(e) {
     const email = document.getElementById('email').value;
     const role = document.getElementById('role').value;
     let logId = document.getElementById('logIdStaff').value;
+    let fieldId = document.getElementById('fieldIdOnStaff').value;
 
     if (logId === 'Select Log') {
         logId = null
+    }
+
+    if (fieldId === 'Select Field') {
+        fieldId = null
     }
 
     const staff = {
@@ -133,6 +138,9 @@ document.getElementById('staff-form').addEventListener('submit', function(e) {
         },
         success: (res) => {
             console.log(res);
+            if (fieldId != null) {
+                saveStaffAndField(res.staffId, fieldId)
+            }
             initializeStaff()
         },
         error: (res) => {
@@ -142,6 +150,30 @@ document.getElementById('staff-form').addEventListener('submit', function(e) {
 
 
 });
+
+function saveStaffAndField(staffId, fieldId) {
+    const formData = new FormData();
+
+    formData.append('staffId', staffId);
+    formData.append('fieldId', fieldId);
+
+    $.ajax({
+        url: "http://localhost:8082/cms/api/v1/staffs",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('token')
+        },
+        success: (res) => {
+            console.log(res);
+        },
+        error: (res) => {
+            console.error(res);
+        }
+    });
+}
 
 function addStaffToTable(staff) {
     const tableBody = document.querySelector('#staff-list tbody');
@@ -244,6 +276,7 @@ $('#updateStaffBtn').on('click', () => {
     const email = document.getElementById('email').value;
     const role = document.getElementById('role').value;
     let logId = document.getElementById('logIdStaff').value;
+
 
     if (logId === 'Select Log') {
         logId = null

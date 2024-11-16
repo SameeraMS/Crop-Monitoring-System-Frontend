@@ -6,14 +6,38 @@ function initializeLog() {
     clearForm()
 }
 
+function encodeLogImage(imageFile) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            resolve(event.target.result); // Ensure 'event' is correctly passed
+        };
+        reader.onerror = function (error) {
+            reject(error); // Handle errors properly
+        };
+        reader.readAsDataURL(imageFile);
+    });
+}
+
 document.getElementById('log-form').addEventListener('submit', function(e) {
     e.preventDefault();
     const logDate = document.getElementById('logDate').value;
     const logDetails = document.getElementById('logDetails').value;
-    const image = document.getElementById('logImage').files[0];
+    const imageFile = document.getElementById('logImage').files[0];
 
-    console.log("image: ");
-    console.log(image);
+    let image = null;
+
+    (async function () {
+        if (imageFile) {
+            try {
+                image = await encodeLogImage(imageFile);
+            } catch (error) {
+                console.error("Error encoding image:", error);
+            }
+        } else {
+            console.log("No file selected.");
+        }
+    })();
 
 
     const log = {
@@ -48,6 +72,7 @@ document.getElementById('log-form').addEventListener('submit', function(e) {
 
 function saveImage(logId, image) {
     if (image != null) {
+
         const formData = new FormData();
 
         formData.append('logId', logId);
@@ -102,22 +127,28 @@ function addLogToTable(log) {
 
     log.logDate = log.logDate.split('T')[0];
 
-    let base64ImageUrl = "data:image/png;base64," + log.logImage;
-
     const img = document.createElement('img');
-    img.src = base64ImageUrl;
-    img.width = '50px';
+
+    if (log.image != null) {
+        img.src = `${log.image}`;
+    }
+
+    img.alt = 'Log Image';
+    img.style.width = '50px'; // Adjust size as needed
+    img.style.height = '50px'; // Adjust size as needed
 
     row.innerHTML = `
-        <td>${log.logId}</td>
-        <td>${log.logDate}</td>
-        <td>${log.logDetails}</td>
-        <td></td>
-        <td><button value="${log.logId}" class="edit-btn" onclick="editLog(this)">Edit</button></td>
-        <td><button value="${log.logId}" class="delete-btn" onclick="deleteLog(this)">Delete</button></td>
-    `;
+    <td>${log.logId}</td>
+    <td>${log.logDate}</td>
+    <td>${log.logDetails}</td>
+    <td></td>
+    <td><button value="${log.logId}" class="edit-btn" onclick="editLog(this)">Edit</button></td>
+    <td><button value="${log.logId}" class="delete-btn" onclick="deleteLog(this)">Delete</button></td>`;
+
     row.cells[3].appendChild(img);
     tableBody.appendChild(row);
+
+
 }
 
 function deleteLog(button) {
@@ -158,14 +189,27 @@ $('#updateLogBtn').on('click', () => {
 
     const logDate = document.getElementById('logDate').value;
     const logDetails = document.getElementById('logDetails').value;
-    const image = document.getElementById('logImage').files[0];
+    const imageFile = document.getElementById('logImage').files[0];
 
     const log = {
         logDate,
         logDetails
     };
 
-    console.log(updateLogId);
+    let image = null;
+
+    (async function () {
+        if (imageFile) {
+            try {
+                image = await encodeLogImage(imageFile);
+            } catch (error) {
+                console.error("Error encoding image:", error);
+            }
+        } else {
+            console.log("No file selected.");
+        }
+    })();
+
 
     $.ajax({
         url: "http://localhost:8082/cms/api/v1/logs/" + updateLogId,
