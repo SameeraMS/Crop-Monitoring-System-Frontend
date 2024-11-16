@@ -65,6 +65,7 @@ function loadCropTable() {
         },
         success: (res) => {
             console.log(res);
+            $('#crop-list tbody').empty();
             res.forEach(crop => {
                 addCropToTable(crop);
             });
@@ -76,13 +77,56 @@ function loadCropTable() {
     });
 }
 
+function encodeCropImage(imageFile) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            resolve(event.target.result); // Ensure 'event' is correctly passed
+        };
+        reader.onerror = function (error) {
+            reject(error); // Handle errors properly
+        };
+        reader.readAsDataURL(imageFile);
+    });
+}
+
+function saveCropImage(cropId, image) {
+    if (image != null) {
+
+        const formData = new FormData();
+
+        formData.append('cropId', cropId);
+        formData.append('image', image);
+
+        $.ajax({
+            url: "http://localhost:8082/cms/api/v1/crops",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            },
+            success: (res) => {
+                console.log(res);
+                initializeCrop()
+            },
+            error: (res) => {
+                console.error(res);
+            }
+        });
+    } else {
+        initializeCrop()
+    }
+
+}
 
 document.getElementById('crop-form').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const commonName = document.getElementById('commonName').value;
     const scientificName = document.getElementById('scientificName').value;
-    let cropImg = document.getElementById('cropImg').value;
+    let cropImg = document.getElementById('cropImg').files[0];
     const category = document.getElementById('cropCategory').value;
     const cropSeason = document.getElementById('cropSeason').value;
     let fieldId = document.getElementById('fieldIdOnCrop').value;
@@ -100,10 +144,23 @@ document.getElementById('crop-form').addEventListener('submit', function(e) {
         logId = null;
     }
 
+    let image = null;
+
+    (async function () {
+        if (cropImg) {
+            try {
+                image = await encodeLogImage(cropImg);
+            } catch (error) {
+                console.error("Error encoding image:", error);
+            }
+        } else {
+            console.log("No file selected.");
+        }
+    })();
+
     const crop = {
         commonName,
         scientificName,
-        cropImg,
         category,
         cropSeason,
         fieldId,
@@ -120,6 +177,8 @@ document.getElementById('crop-form').addEventListener('submit', function(e) {
         contentType: "application/json",
         success: (res) => {
             console.log(res);
+            var cropId = res.cropId;
+            saveCropImage(cropId, image);
             initializeCrop()
         },
         error: (res) => {
@@ -138,9 +197,22 @@ function addCropToTable(crop) {
     const tableBody = document.querySelector('#crop-list tbody');
     const row = document.createElement('tr');
 
+    const img = document.createElement('img');
+
+    if (crop.cropImg != null) {
+        img.src = `${crop.cropImg}`;
+    } else {
+        img.src = "https://images.app.goo.gl/a4CZZG5C3Y4UGcPu6";
+    }
+
+    img.alt = 'crop Image';
+    img.style.width = '50px'; // Adjust size as needed
+    img.style.height = '50px'; // Adjust size as needed
+
     row.innerHTML = `
+        <td>${crop.cropId}</td>
         <td>${crop.commonName}</td>
-        <td>${crop.scientificName}</td>
+        <td></td>
         <td>${crop.category}</td>
         <td>${crop.cropSeason}</td>
         <td>${crop.fieldId}</td>
@@ -148,6 +220,7 @@ function addCropToTable(crop) {
         <td><button value="${crop.cropId}" class="delete-btn" onclick="deleteCrop(this)">Delete</button></td>
     `;
 
+    row.cells[2].appendChild(img);
     tableBody.appendChild(row);
 }
 
@@ -214,7 +287,7 @@ function editCrop(button) {
 $('#updateCropBtn').on('click', function() {
     const commonName = document.getElementById('commonName').value;
     const scientificName = document.getElementById('scientificName').value;
-    let cropImg = document.getElementById('cropImg').value;
+    let cropImg = document.getElementById('cropImg').files[0];
     const category = document.getElementById('cropCategory').value;
     const cropSeason = document.getElementById('cropSeason').value;
     let fieldId = document.getElementById('fieldIdOnCrop').value;
@@ -235,12 +308,25 @@ $('#updateCropBtn').on('click', function() {
     const crop = {
         commonName,
         scientificName,
-        cropImg,
         category,
         cropSeason,
         fieldId,
         logId
     };
+
+    let image = null;
+
+    (async function () {
+        if (cropImg) {
+            try {
+                image = await encodeLogImage(cropImg);
+            } catch (error) {
+                console.error("Error encoding image:", error);
+            }
+        } else {
+            console.log("No file selected.");
+        }
+    })();
 
     $.ajax({
         url: "http://localhost:8082/cms/api/v1/crops/" + updateCropId,
@@ -252,6 +338,7 @@ $('#updateCropBtn').on('click', function() {
         contentType: "application/json",
         success: (res) => {
             console.log(res);
+            saveCropImage(updateCropId, image);
             initializeCrop()
         },
         error: (res) => {
