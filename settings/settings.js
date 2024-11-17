@@ -146,7 +146,17 @@ document.getElementById('changePasswordBtn').addEventListener('click', () => {
     document.getElementById('change-password-form').reset();
 });
 
-document.getElementById('delete-account-form').addEventListener('submit', (e) => {
+$('#deleteAccountBtn').on('click', function (e) {
+
+    const currentPassword = document.getElementById('deletePassword').value;
+
+    const email = userEmail;
+    const password = currentPassword;
+
+    const checkUser = {
+        email,
+        password
+    };
 
     $.ajax({
         url: 'http://localhost:8082/cms/api/v1/auth/signin',
@@ -154,13 +164,6 @@ document.getElementById('delete-account-form').addEventListener('submit', (e) =>
         data: JSON.stringify(checkUser),
         headers: { "Content-Type": "application/json" },
         success: (response) => {
-
-            const password = newPassword;
-
-            const user = {
-                email,
-                password
-            };
 
             $.ajax({
                 url: "http://localhost:8082/cms/api/v1/users/" + userEmail,
@@ -172,7 +175,7 @@ document.getElementById('delete-account-form').addEventListener('submit', (e) =>
                     console.log("User deleted successfully:", response);
                     localStorage.removeItem('token');
                     localStorage.removeItem('user');
-                    window.location.href = "../login/login.html";
+                    window.location.href = "../index.html";
                 },
                 error: function (error) {
                     console.log(error);
