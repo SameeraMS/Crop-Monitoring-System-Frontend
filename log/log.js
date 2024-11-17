@@ -1,9 +1,11 @@
+import { initializeStaff } from "../staff/staff.js";
 
 initializeLog();
 
 function initializeLog() {
     loadLogTable()
     clearForm()
+    initializeStaff()
 }
 
 function encodeLogImage(imageFile) {

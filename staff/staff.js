@@ -1,6 +1,6 @@
 initializeStaff()
 
- function initializeStaff() {
+ export function initializeStaff() {
     loadStaffTable()
     loadLogIds()
     loadFieldIds()
