@@ -130,62 +130,74 @@ function addLogToTable(log) {
     log.logDate = log.logDate.split('T')[0];
 
     const img = document.createElement('img');
-
-    if (log.image != null) {
-        img.src = `${log.image}`;
-    }
-
+    img.src = log.image ? log.image : 'default-image.png'; // Use a default image if log.image is null
     img.alt = 'Log Image';
     img.style.width = '50px'; // Adjust size as needed
-    img.style.height = '50px'; // Adjust size as needed
+    img.style.height = '50px';
 
     row.innerHTML = `
-    <td>${log.logId}</td>
-    <td>${log.logDate}</td>
-    <td>${log.logDetails}</td>
-    <td></td>
-    <td><button value="${log.logId}" class="edit-btn" onclick="editLog(this)">Edit</button></td>
-    <td><button value="${log.logId}" class="delete-btn" onclick="deleteLog(this)">Delete</button></td>`;
+        <td>${log.logId}</td>
+        <td>${log.logDate}</td>
+        <td>${log.logDetails}</td>
+        <td></td>
+        <td><button value="${log.logId}" class="edit-btn">Edit</button></td>
+        <td><button value="${log.logId}" class="delete-btn">Delete</button></td>`;
 
     row.cells[3].appendChild(img);
+
     tableBody.appendChild(row);
-
-
 }
 
-function deleteLog(button) {
-    const row = button.parentElement.parentElement;
-    const logId = row.cells[0].textContent;
+document.querySelector('#log-list tbody').addEventListener('click', (e) => {
+    const target = e.target;
+
+    if (target.classList.contains('edit-btn')) {
+        editLog(target.value);
+    }
+
+    if (target.classList.contains('delete-btn')) {
+        deleteLog(target.value);
+    }
+});
+
+function deleteLog(logId) {
+    if (!confirm(`Are you sure you want to delete log with ID ${logId}?`)) return;
+
     $.ajax({
-        url: "http://localhost:8082/cms/api/v1/logs/" + logId,
+        url: `http://localhost:8082/cms/api/v1/logs/${logId}`,
         type: "DELETE",
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            console.log(res);
-            initializeLog()
+            console.log('Log deleted successfully:', res);
+            initializeLog();
         },
-        error: (res) => {
-            console.error(res);
+        error: (err) => {
+            console.error('Error deleting log:', err);
+            alert('Failed to delete log. Please try again.');
         }
     });
 }
 
-function editLog(button) {
-    const row = button.parentElement.parentElement;
-    $('#updateLogBtn').css('display', 'inline');
+let updateLogId = null;
 
-    updateLogId = row.cells[0].textContent;
+function editLog(logId) {
+    if (!confirm(`Are you sure you want to edit log with ID ${logId}?`)) return;
+
+    updateLogId = logId;
+
+    const row = document.querySelector(`#log-list tbody tr td button[value="${logId}"]`).closest('tr');
+
     const logDate = row.cells[1].textContent;
     const logDetails = row.cells[2].textContent;
 
     document.getElementById('logDate').value = logDate;
     document.getElementById('logDetails').value = logDetails;
 
+    $('#updateLogBtn').css('display', 'inline');
 }
 
-let updateLogId = null;
 
 $('#updateLogBtn').on('click', () => {
 

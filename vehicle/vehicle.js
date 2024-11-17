@@ -109,7 +109,7 @@ function addVehicleToTable(vehicle) {
         <td>${vehicle.category}</td>
         <td>${vehicle.fuelType}</td>
         <td>${vehicle.vehicleStatus}</td>
-        <td>${vehicle.staffId}</td>
+        <td>${vehicle.staffId || "Not Assigned"}</td>
         <td><button class="edit-btn" onclick="editVehicle(this)">Edit</button></td>
         <td><button class="delete-btn" onclick="deleteVehicle(this)">Delete</button></td>
     `;
@@ -117,59 +117,62 @@ function addVehicleToTable(vehicle) {
     tableBody.appendChild(row);
 }
 
-
 function deleteVehicle(button) {
     const row = button.parentElement.parentElement;
+    const vehicleId = row.querySelector('td:nth-child(1)').textContent;
+
+    if (!confirm(`Are you sure you want to delete the vehicle with ID ${vehicleId}?`)) return;
 
     $.ajax({
-        url: "http://localhost:8082/cms/api/v1/vehicles/" + vehicleId,
+        url: `http://localhost:8082/cms/api/v1/vehicles/${vehicleId}`,
         type: "DELETE",
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            console.log(res);
-            initializeVehicle()
+            console.log("Vehicle deleted successfully:", res);
+            initializeVehicle();
         },
-        error: (res) => {
-            console.error(res);
+        error: (err) => {
+            console.error("Error deleting vehicle:", err);
         }
     });
 }
 
-var updateVehicleId = null;
+let updateVehicleId = null;
 
 function editVehicle(button) {
     const row = button.parentElement.parentElement;
+    const vehicleId = row.querySelector('td:nth-child(1)').textContent;
 
-    const vehicleId = row.cells[0].textContent;
+    updateVehicleId = vehicleId;
+
+    $('#updateVehicleBtn').css('display', 'inline');
+
     $.ajax({
-        url: "http://localhost:8082/cms/api/v1/vehicles/" + vehicleId,
+        url: `http://localhost:8082/cms/api/v1/vehicles/${vehicleId}`,
         type: "GET",
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            console.log(res);
+            console.log("Vehicle data fetched successfully:", res);
+
             document.getElementById('licenNo').value = res.licenNo;
             document.getElementById('category').value = res.category;
             document.getElementById('fuelType').value = res.fuelType;
             document.getElementById('vehicleStatus').value = res.vehicleStatus;
-            if (res.staffId != null) {
-                document.getElementById('staffIdOnVehicle').value = res.staffId;
-            } else {
-                document.getElementById('staffIdOnVehicle').value = 'Select Staff';
-            }
-            document.getElementById('remark').value = res.remark;
-            $('#updateVehicleBtn').css('display', 'inline');
-            updateVehicleId = vehicleId;
+
+            $('#staffIdOnVehicle').val(res.staffId || 'Select Staff');
+
+            document.getElementById('remark').value = res.remark || "";
         },
-        error: (res) => {
-            console.error(res);
+        error: (err) => {
+            console.error("Error fetching vehicle data:", err);
         }
     });
-
 }
+
 
 $('#updateVehicleBtn').on('click', function() {
     const licenNo = document.getElementById('licenNo').value;

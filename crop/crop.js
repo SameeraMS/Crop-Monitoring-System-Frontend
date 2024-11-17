@@ -149,7 +149,7 @@ document.getElementById('crop-form').addEventListener('submit', function(e) {
     (async function () {
         if (cropImg) {
             try {
-                image = await encodeLogImage(cropImg);
+                image = await encodeCropImage(cropImg);
             } catch (error) {
                 console.error("Error encoding image:", error);
             }
@@ -198,14 +198,8 @@ function addCropToTable(crop) {
     const row = document.createElement('tr');
 
     const img = document.createElement('img');
-
-    if (crop.cropImg != null) {
-        img.src = `${crop.cropImg}`;
-    } else {
-        img.src = "https://images.app.goo.gl/a4CZZG5C3Y4UGcPu6";
-    }
-
-    img.alt = 'crop Image';
+    img.src = crop.cropImg ? crop.cropImg : "https://images.app.goo.gl/a4CZZG5C3Y4UGcPu6";
+    img.alt = 'Crop Image';
     img.style.width = '50px'; // Adjust size as needed
     img.style.height = '50px'; // Adjust size as needed
 
@@ -225,22 +219,24 @@ function addCropToTable(crop) {
 }
 
 function deleteCrop(button) {
+    if (!confirm(`Are you sure you want to delete crop with ID ${button.value}?`)) return;
+
     const row = button.parentElement.parentElement;
 
-    const cropId = row.querySelector('td:nth-child(1)').textContent;
+    const cropId = row.cells[0].textContent;
 
     $.ajax({
-        url: "http://localhost:8082/cms/api/v1/crops/" + cropId,
+        url: `http://localhost:8082/cms/api/v1/crops/${cropId}`,
         type: "DELETE",
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            console.log(res);
-            initializeCrop()
+            console.log("Crop deleted successfully:", res);
+            initializeCrop();
         },
-        error: (res) => {
-            console.error(res);
+        error: (err) => {
+            console.error("Error deleting crop:", err);
         }
     });
 }
@@ -248,41 +244,38 @@ function deleteCrop(button) {
 let updateCropId = null;
 
 function editCrop(button) {
+    if (!confirm(`Are you sure you want to edit crop with ID ${button.value}?`)) return;
+
     const row = button.parentElement.parentElement;
 
-    updateCropId = row.cells[0].textContent;
+    const cropId = row.cells[0].textContent;
+    updateCropId = cropId;
+
+    $('#updateCropBtn').css('display', 'inline');
 
     $.ajax({
-        url: "http://localhost:8082/cms/api/v1/crops/" + updateCropId,
+        url: `http://localhost:8082/cms/api/v1/crops/${cropId}`,
         type: "GET",
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            console.log(res);
+            console.log("Crop data fetched successfully:", res);
+
             document.getElementById('commonName').value = res.commonName;
             document.getElementById('scientificName').value = res.scientificName;
             document.getElementById('cropCategory').value = res.category;
             document.getElementById('cropSeason').value = res.cropSeason;
-            if (res.fieldId != null) {
-                document.getElementById('fieldIdOnCrop').value = res.fieldId;
-            } else {
-                document.getElementById('fieldIdOnCrop').value = 'Select Field';
-            }
 
-            if (res.logId != null) {
-                document.getElementById('logIdOnCrop').value = res.logId;
-            } else {
-                document.getElementById('logIdOnCrop').value = 'Select Log';
-            }
-            $('#updateCropBtn').css('display', 'inline');
+            document.getElementById('fieldIdOnCrop').value = res.fieldId || 'Select Field';
+            document.getElementById('logIdOnCrop').value = res.logId || 'Select Log';
         },
-        error: (res) => {
-            console.error(res);
+        error: (err) => {
+            console.error("Error fetching crop data:", err);
         }
     });
-
 }
+
 
 $('#updateCropBtn').on('click', function() {
     const commonName = document.getElementById('commonName').value;
@@ -319,7 +312,7 @@ $('#updateCropBtn').on('click', function() {
     (async function () {
         if (cropImg) {
             try {
-                image = await encodeLogImage(cropImg);
+                image = await encodeCropImage(cropImg);
             } catch (error) {
                 console.error("Error encoding image:", error);
             }

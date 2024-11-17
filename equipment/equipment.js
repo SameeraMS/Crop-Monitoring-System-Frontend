@@ -137,32 +137,33 @@ function addEquipmentToTable(equipment) {
         <td>${equipment.equipmentId}</td>
         <td>${equipment.equipmentName}</td>
         <td>${equipment.equipmentStatus}</td>
-        <td>${equipment.staffId}</td>
-        <td>${equipment.fieldId}</td>
-        <td><button value=${equipment.equipmentId} class="edit-btn" onclick="editEquipment(this)">Edit</button></td>
-        <td><button value=${equipment.equipmentId} class="delete-btn" onclick="deleteEquipment(this)">Delete</button></td>
+        <td>${equipment.staffId || "Not Assigned"}</td>
+        <td>${equipment.fieldId || "Not Assigned"}</td>
+        <td><button value="${equipment.equipmentId}" class="edit-btn" onclick="editEquipment(this)">Edit</button></td>
+        <td><button value="${equipment.equipmentId}" class="delete-btn" onclick="deleteEquipment(this)">Delete</button></td>
     `;
 
     tableBody.appendChild(row);
 }
 
 function deleteEquipment(button) {
-    const row = button.parentElement.parentElement;
+    if (!confirm(`Are you sure you want to delete equipment with ID ${button.value}?`)) return;
 
+    const row = button.parentElement.parentElement;
     const equipmentId = row.querySelector('td:nth-child(1)').textContent;
 
     $.ajax({
-        url: "http://localhost:8082/cms/api/v1/equipments/" + equipmentId,
+        url: `http://localhost:8082/cms/api/v1/equipments/${equipmentId}`,
         type: "DELETE",
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            console.log(res);
-            initializeEquipment()
+            console.log("Equipment deleted successfully:", res);
+            initializeEquipment();
         },
-        error: (res) => {
-            console.error(res);
+        error: (err) => {
+            console.error("Error deleting equipment:", err);
         }
     });
 }
@@ -170,39 +171,37 @@ function deleteEquipment(button) {
 let updateEquipmentId = null;
 
 function editEquipment(button) {
-    const row = button.parentElement.parentElement;
+    if (!confirm(`Are you sure you want to edit equipment with ID ${button.value}?`)) return;
 
+    const row = button.parentElement.parentElement;
     const equipmentId = row.querySelector('td:nth-child(1)').textContent;
+
     updateEquipmentId = equipmentId;
+
+    $('#updateEquipmentBtn').css('display', 'inline');
+
     $.ajax({
-        url: "http://localhost:8082/cms/api/v1/equipments/" + equipmentId,
+        url: `http://localhost:8082/cms/api/v1/equipments/${equipmentId}`,
         type: "GET",
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
+            console.log("Equipment data fetched successfully:", res);
 
             document.getElementById('equipmentName').value = res.equipmentName;
             document.getElementById('equipmentType').value = res.equipmentType;
             document.getElementById('equipmentStatus').value = res.equipmentStatus;
-            if (res.staffId === null) {
-                $('#staffIdOnEquipment').val('Select Staff');
-            } else {
-                $('#staffIdOnEquipment').val(res.staffId);
-            }
 
-            if (res.fieldId === null) {
-                $('#fieldIdOnEquipment').val('Select Field');
-            } else {
-                $('#fieldIdOnEquipment').val(res.fieldId);
-            }
-            $('#updateEquipmentBtn').css('display', 'inline');
+            $('#staffIdOnEquipment').val(res.staffId || 'Select Staff');
+            $('#fieldIdOnEquipment').val(res.fieldId || 'Select Field');
         },
-        error: (res) => {
-            console.error(res);
+        error: (err) => {
+            console.error("Error fetching equipment data:", err);
         }
     });
 }
+
 
 $('#updateEquipmentBtn').on('click', () => {
     const equipmentName = document.getElementById('equipmentName').value;

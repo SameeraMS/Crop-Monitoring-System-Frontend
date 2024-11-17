@@ -184,50 +184,60 @@ function addStaffToTable(staff) {
         <td>${staff.firstName}</td>
         <td>${staff.email}</td>
         <td>${staff.role}</td>
-        <td><button value="${staff.staffId}" class="edit-btn" onclick="editStaff(this)">Edit</button></td>
-        <td><button value="${staff.staffId}" class="delete-btn" onclick="deleteStaff(this)">Delete</button></td>
+        <td><button value="${staff.staffId}" class="edit-btn">Edit</button></td>
+        <td><button value="${staff.staffId}" class="delete-btn">Delete</button></td>
     `;
 
     tableBody.appendChild(row);
 }
 
-function deleteStaff(button) {
-    const row = button.parentElement.parentElement;
+document.querySelector('#staff-list tbody').addEventListener('click', (e) => {
+    const target = e.target;
 
-    const staffId = row.querySelector('td:nth-child(1)').textContent;
+    if (target.classList.contains('edit-btn')) {
+        editStaff(target.value);
+    }
+
+    if (target.classList.contains('delete-btn')) {
+        deleteStaff(target.value);
+    }
+});
+
+function deleteStaff(staffId) {
+    if (!confirm(`Are you sure you want to delete staff with ID ${staffId}?`)) return;
 
     $.ajax({
-        url: "http://localhost:8082/cms/api/v1/staffs/" + staffId,
+        url: `http://localhost:8082/cms/api/v1/staffs/${staffId}`,
         type: "DELETE",
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            console.log(res);
-            initializeStaff()
+            console.log('Staff deleted successfully:', res);
+            initializeStaff();
         },
-        error: (res) => {
-            console.error(res);
+        error: (err) => {
+            console.error('Error deleting staff:', err);
+            alert('Failed to delete staff. Please try again.');
         }
     });
 }
 
-var updateStaffId = null;
+let updateStaffId = null;
 
-function editStaff(button) {
-    const row = button.parentElement.parentElement;
-
-    const staffId = row.querySelector('td:nth-child(1)').textContent;
+function editStaff(staffId) {
+    if (!confirm(`Are you sure you want to edit staff with ID ${staffId}?`)) return;
 
     $.ajax({
-        url: "http://localhost:8082/cms/api/v1/staffs/" + staffId,
+        url: `http://localhost:8082/cms/api/v1/staffs/${staffId}`,
         type: "GET",
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            console.log(res);
+            console.log('Staff details fetched:', res);
             updateStaffId = res.staffId;
+
             document.getElementById('firstName').value = res.firstName;
             document.getElementById('lastName').value = res.lastName;
             document.getElementById('designation').value = res.designation;
@@ -243,13 +253,16 @@ function editStaff(button) {
             document.getElementById('email').value = res.email;
             document.getElementById('role').value = res.role;
             document.getElementById('logIdStaff').value = res.logId;
+
             $('#updateStaffBtn').css('display', 'inline');
         },
-        error: (res) => {
-            console.error(res);
+        error: (err) => {
+            console.error('Error fetching staff details:', err);
+            alert('Failed to fetch staff details. Please try again.');
         }
     });
 }
+
 
 function clearStaffForm() {
     document.getElementById('staff-form').reset();

@@ -193,21 +193,19 @@ function addFieldToTable(field) {
     const img1 = document.createElement('img');
     const img2 = document.createElement('img');
 
-    if (field.image1 != null) {
-        img1.src = `${field.image1}`;
+    if (field.image1) {
+        img1.src = field.image1;
+        img1.alt = 'Field Image 1';
+        img1.style.width = '50px'; // Adjust size as needed
+        img1.style.height = '50px';
     }
 
-    if (field.image2 != null) {
-        img2.src = `${field.image2}`;
+    if (field.image2) {
+        img2.src = field.image2;
+        img2.alt = 'Field Image 2';
+        img2.style.width = '50px'; // Adjust size as needed
+        img2.style.height = '50px';
     }
-
-    img1.alt = 'Field Image';
-    img1.style.width = '50px'; // Adjust size as needed
-    img1.style.height = '50px'; // Adjust size as needed
-
-    img2.alt = 'Field Image';
-    img2.style.width = '50px'; // Adjust size as needed
-    img2.style.height = '50px'; // Adjust size as needed
 
     row.innerHTML = `
         <td>${field.fieldId}</td>
@@ -219,28 +217,31 @@ function addFieldToTable(field) {
         <td><button value="${field.fieldId}" class="delete-btn" onclick="deleteField(this)">Delete</button></td>
     `;
 
-    row.cells[3].appendChild(img1);
-    row.cells[4].appendChild(img2);
+    if (field.image1) row.cells[3].appendChild(img1);
+    if (field.image2) row.cells[4].appendChild(img2);
+
     tableBody.appendChild(row);
 }
 
 function deleteField(button) {
+    if (!confirm(`Are you sure you want to delete staff with ID ${button.value}?`)) return;
+
     const row = button.parentElement.parentElement;
 
-    const fieldId = row.querySelector('td:nth-child(1)').textContent;
+    const fieldId = row.cells[0].textContent;
 
     $.ajax({
-        url: "http://localhost:8082/cms/api/v1/fields/" + fieldId,
+        url: `http://localhost:8082/cms/api/v1/fields/${fieldId}`,
         type: "DELETE",
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            console.log(res);
-            initializeField()
+            console.log("Field deleted successfully:", res);
+            initializeField();
         },
-        error: (res) => {
-            console.error(res);
+        error: (err) => {
+            console.error("Error deleting field:", err);
         }
     });
 }
@@ -248,37 +249,36 @@ function deleteField(button) {
 let updateFieldId = null;
 
 function editField(button) {
+    if (!confirm(`Are you sure you want to edit staff with ID ${button.value}?`)) return;
+
     const row = button.parentElement.parentElement;
 
-    const fieldId = row.querySelector('td:nth-child(1)').textContent;
+    const fieldId = row.cells[0].textContent;
     updateFieldId = fieldId;
 
     $('#updateFieldBtn').css('display', 'inline');
 
     $.ajax({
-        url: "http://localhost:8082/cms/api/v1/fields/" + fieldId,
+        url: `http://localhost:8082/cms/api/v1/fields/${fieldId}`,
         type: "GET",
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            console.log(res);
+            console.log("Field data fetched successfully:", res);
+
             document.getElementById('fieldName').value = res.fieldName;
-            document.getElementById('fieldLocation').value = res.fieldLocation.x + ', ' + res.fieldLocation.y;
+            document.getElementById('fieldLocation').value = `${res.fieldLocation.x}, ${res.fieldLocation.y}`;
             document.getElementById('fieldSize').value = res.fieldSize;
 
-            if (res.logId === null) {
-                $('#logIdOnField').val('Select Log');
-            } else {
-                $('#logIdOnField').val(res.logId);
-            }
+            $('#logIdOnField').val(res.logId || 'Select Log');
         },
-        error: (res) => {
-            console.error(res);
+        error: (err) => {
+            console.error("Error fetching field data:", err);
         }
     });
-
 }
+
 
 $('#updateFieldBtn').on('click', () => {
     const fieldName = document.getElementById('fieldName').value;
