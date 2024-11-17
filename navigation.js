@@ -4,7 +4,7 @@ $('#log_management').css('display','none');
 $('#staff_management').css('display','none');
 $('#crop_management').css('display','none');
 $('#field_management').css('display','none');
-$('#field_management').css('display','none');
+$('#account_settings').css('display','none');
 
 $('#dashboard_nav').on('click', () => {
     $('#dashboard').css('display','block');
@@ -14,10 +14,7 @@ $('#dashboard_nav').on('click', () => {
     $('#staff_management').css('display','none');
     $('#crop_management').css('display','none');
     $('#field_management').css('display','none');
-
-
-
-
+    $('#account_settings').css('display','none');
 });
 
 $('#vehicle_nav').on('click', () => {
@@ -28,10 +25,7 @@ $('#vehicle_nav').on('click', () => {
     $('#staff_management').css('display','none');
     $('#crop_management').css('display','none');
     $('#field_management').css('display','none');
-
-
-
-
+    $('#account_settings').css('display','none');
 });
 
 $('#equipment_nav').on('click', () => {
@@ -42,10 +36,7 @@ $('#equipment_nav').on('click', () => {
     $('#staff_management').css('display','none');
     $('#crop_management').css('display','none');
     $('#field_management').css('display','none');
-
-
-
-
+    $('#account_settings').css('display','none');
 });
 
 $('#log_nav').on('click', () => {
@@ -56,10 +47,7 @@ $('#log_nav').on('click', () => {
     $('#staff_management').css('display','none');
     $('#crop_management').css('display','none');
     $('#field_management').css('display','none');
-
-
-
-
+    $('#account_settings').css('display','none');
 });
 
 $('#staff_nav').on('click', () => {
@@ -70,10 +58,7 @@ $('#staff_nav').on('click', () => {
     $('#staff_management').css('display','block');
     $('#crop_management').css('display','none');
     $('#field_management').css('display','none');
-
-
-
-
+    $('#account_settings').css('display','none');
 });
 
 $('#crop_nav').on('click', () => {
@@ -84,10 +69,7 @@ $('#crop_nav').on('click', () => {
     $('#staff_management').css('display','none');
     $('#crop_management').css('display','block');
     $('#field_management').css('display','none');
-
-
-
-
+    $('#account_settings').css('display','none');
 });
 
 $('#fields_nav').on('click', () => {
@@ -98,10 +80,7 @@ $('#fields_nav').on('click', () => {
     $('#staff_management').css('display','none');
     $('#crop_management').css('display','none');
     $('#field_management').css('display','block');
-
-
-
-
+    $('#account_settings').css('display','none');
 });
 
 $('#settings_nav').on('click', () => {
@@ -112,8 +91,5 @@ $('#settings_nav').on('click', () => {
     $('#staff_management').css('display','none');
     $('#crop_management').css('display','none');
     $('#field_management').css('display','none');
-
-
-
-
+    $('#account_settings').css('display','block');
 });

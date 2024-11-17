@@ -102,6 +102,11 @@ body {
     color: white;
 }
 
+#settings_nav.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
 .bottom-nav {
     border-top: 2px solid #eee;
     padding-top: 1rem;

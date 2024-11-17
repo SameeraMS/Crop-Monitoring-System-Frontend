@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../staff/staff.css">
     <link rel="stylesheet" href="../crop/crop.css">
     <link rel="stylesheet" href="../field/field.css">
+    <link rel="stylesheet" href="../settings/settings.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
@@ -551,6 +552,74 @@
             </div>
         </div>
 
+        <!-- Account Settings -->
+        <div id="account_settings" class="settings-container">
+            <div class="greeting">
+                <div>
+                    <h1>Account Settings</h1>
+                    <p>Manage your email, password, role, and role code settings.</p>
+                </div>
+            </div>
+
+            <!-- Settings Form -->
+            <div class="settings-form">
+                <h2>Update Settings</h2>
+                <form id="settings-form">
+                    <div class="form-group">
+                        <label for="emailForSettings">Email:</label>
+                        <input type="email" id="emailForSettings" disabled/>
+                    </div>
+                    <div class="form-group">
+                        <label for="roleForSettings">Role:</label>
+                        <select id="roleForSettings" required>
+                            <option value="MANAGER">Manager</option>
+                            <option value="ADMINISTRATIVE">Administrative</option>
+                            <option value="SCIENTIST">Scientist</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="roleCode">Role Code:</label>
+                        <input type="text" id="roleCode" placeholder="Enter role code" required />
+                    </div>
+                    <button id="saveSettingsBtn" type="submit" class="add-btn">Save Settings</button>
+                </form>
+            </div>
+
+            <!-- Change Password Form -->
+            <div class="settings-form">
+                <h2>Change Password</h2>
+                <form id="change-password-form">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password:</label>
+                        <input type="password" id="currentPassword" placeholder="Enter current password" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password:</label>
+                        <input type="password" id="newPassword" placeholder="Enter new password" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password:</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirm new password" required />
+                    </div>
+                    <button id="changePasswordBtn" type="submit" class="add-btn">Change Password</button>
+                </form>
+            </div>
+
+            <div class="settings-form">
+                <h2>Delete Account</h2>
+                <form id="delete-account-form">
+                    <div class="form-group">
+                        <label for="deletePassword">Password:</label>
+                        <input type="password" id="deletePassword" placeholder="Enter password" required />
+                    </div>
+                    <button id="deleteAccountBtn" type="submit" class="add-btn">Delete Account</button>
+                </form>
+            </div>
+        </div>
+
+
+
 
 
     </main>
@@ -567,6 +636,7 @@
 <script src="../staff/staff.js"></script>
 <script src="../crop/crop.js"></script>
 <script src="../field/field.js"></script>
+<script src="../settings/settings.js"></script>
 <script src="../navigation.js"></script>
 </body>
 </html>

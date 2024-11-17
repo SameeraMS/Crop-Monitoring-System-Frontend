@@ -54,16 +54,37 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add interactivity to navigation items
     document.querySelectorAll('.nav-items li').forEach(item => {
         item.addEventListener('click', () => {
-            document.querySelector('.nav-items li.active').classList.remove('active');
-            item.classList.add('active');
+            const currentActive = document.querySelector('.nav-items li.active');
+            if (currentActive) {
+                currentActive.classList.remove('active');
+            }
 
-            // Close sidebar on mobile after clicking a menu item
+            item.classList.add('active');
+            $('#settings_nav').removeClass('active');
+
             if (window.innerWidth <= 1024) {
-                sidebar.classList.remove('active');
-                hamburger.classList.remove('active');
+                const sidebar = document.querySelector('.sidebar');
+                const hamburger = document.querySelector('.hamburger');
+
+                if (sidebar) sidebar.classList.remove('active');
+                if (hamburger) hamburger.classList.remove('active');
             }
         });
     });
+
+
+
+    $('#settings_nav').on('click', () => {
+        document.querySelector('.nav-items li.active').classList.remove('active');
+
+        $('#settings_nav').addClass('active');
+
+        if (window.innerWidth <= 1024) {
+            document.querySelector('.sidebar').classList.remove('active');
+            document.querySelector('.hamburger').classList.remove('active');
+        }
+    });
+
 
     // Add interactivity to export button
     document.querySelector('.export-btn').addEventListener('click', () => {

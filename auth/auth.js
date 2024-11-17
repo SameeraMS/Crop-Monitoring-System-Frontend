@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 success: (response) => {
                     document.cookie = "token=" + response.token;
                     localStorage.setItem('token', response.token);
+                    localStorage.setItem('user', email);
                     window.location.href = 'home/home.html';
                 },
                 error: (xhr, status, error) => {
@@ -103,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 success: (response) => {
                     document.cookie = "token=" + response.token;
                     localStorage.setItem('token', response.token);
+                    localStorage.setItem('user', email);
                     window.location.href = '../home/home.html';
                 },
                 error: (xhr, status, error) => {
