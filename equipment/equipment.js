@@ -138,18 +138,29 @@ function addEquipmentToTable(equipment) {
         <td>${equipment.equipmentStatus}</td>
         <td>${equipment.staffId || "Not Assigned"}</td>
         <td>${equipment.fieldId || "Not Assigned"}</td>
-        <td><button value="${equipment.equipmentId}" class="edit-btn" onclick="editEquipment(this)">Edit</button></td>
-        <td><button value="${equipment.equipmentId}" class="delete-btn" onclick="deleteEquipment(this)">Delete</button></td>
+        <td><button class="edit-btn" data-equipment-id="${equipment.equipmentId}">Edit</button></td>
+        <td><button class="delete-btn" data-equipment-id="${equipment.equipmentId}">Delete</button></td>
     `;
 
     tableBody.appendChild(row);
 }
 
-function deleteEquipment(button) {
-    if (!confirm(`Are you sure you want to delete equipment with ID ${button.value}?`)) return;
+document.querySelector('#equipment-list tbody').addEventListener('click', (e) => {
+    const target = e.target;
 
-    const row = button.parentElement.parentElement;
-    const equipmentId = row.querySelector('td:nth-child(1)').textContent;
+    if (target.classList.contains('edit-btn')) {
+        const equipmentId = target.getAttribute('data-equipment-id');
+        editEquipment(equipmentId);
+    }
+
+    if (target.classList.contains('delete-btn')) {
+        const equipmentId = target.getAttribute('data-equipment-id');
+        deleteEquipment(equipmentId);
+    }
+});
+
+function deleteEquipment(equipmentId) {
+    if (!confirm(`Are you sure you want to delete equipment with ID ${equipmentId}?`)) return;
 
     $.ajax({
         url: `http://localhost:8082/cms/api/v1/equipments/${equipmentId}`,
@@ -169,11 +180,8 @@ function deleteEquipment(button) {
 
 let updateEquipmentId = null;
 
-function editEquipment(button) {
-    if (!confirm(`Are you sure you want to edit equipment with ID ${button.value}?`)) return;
-
-    const row = button.parentElement.parentElement;
-    const equipmentId = row.querySelector('td:nth-child(1)').textContent;
+function editEquipment(equipmentId) {
+    if (!confirm(`Are you sure you want to edit equipment with ID ${equipmentId}?`)) return;
 
     updateEquipmentId = equipmentId;
 

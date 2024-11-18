@@ -201,22 +201,8 @@ function addFieldToTable(field) {
     const tableBody = document.querySelector('#field-list tbody');
     const row = document.createElement('tr');
 
-    const img1 = document.createElement('img');
-    const img2 = document.createElement('img');
-
-    if (field.image1) {
-        img1.src = field.image1;
-        img1.alt = 'Field Image 1';
-        img1.style.width = '50px'; // Adjust size as needed
-        img1.style.height = '50px';
-    }
-
-    if (field.image2) {
-        img2.src = field.image2;
-        img2.alt = 'Field Image 2';
-        img2.style.width = '50px'; // Adjust size as needed
-        img2.style.height = '50px';
-    }
+    const img1 = createImageElement(field.image1, 'Field Image 1');
+    const img2 = createImageElement(field.image2, 'Field Image 2');
 
     row.innerHTML = `
         <td>${field.fieldId}</td>
@@ -224,22 +210,42 @@ function addFieldToTable(field) {
         <td>${field.fieldSize}</td>
         <td></td>
         <td></td>
-        <td><button value="${field.fieldId}" class="edit-btn" onclick="editField(this)">Edit</button></td>
-        <td><button value="${field.fieldId}" class="delete-btn" onclick="deleteField(this)">Delete</button></td>
+        <td><button class="edit-btn" data-field-id="${field.fieldId}">Edit</button></td>
+        <td><button class="delete-btn" data-field-id="${field.fieldId}">Delete</button></td>
     `;
 
-    if (field.image1) row.cells[3].appendChild(img1);
-    if (field.image2) row.cells[4].appendChild(img2);
+    if (img1) row.cells[3].appendChild(img1);
+    if (img2) row.cells[4].appendChild(img2);
 
     tableBody.appendChild(row);
 }
 
-function deleteField(button) {
-    if (!confirm(`Are you sure you want to delete staff with ID ${button.value}?`)) return;
+function createImageElement(src, alt) {
+    if (!src) return null;
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = alt;
+    img.style.width = '50px';
+    img.style.height = '50px';
+    return img;
+}
 
-    const row = button.parentElement.parentElement;
+document.querySelector('#field-list tbody').addEventListener('click', (e) => {
+    const target = e.target;
 
-    const fieldId = row.cells[0].textContent;
+    if (target.classList.contains('edit-btn')) {
+        const fieldId = target.getAttribute('data-field-id');
+        editField(fieldId);
+    }
+
+    if (target.classList.contains('delete-btn')) {
+        const fieldId = target.getAttribute('data-field-id');
+        deleteField(fieldId);
+    }
+});
+
+function deleteField(fieldId) {
+    if (!confirm(`Are you sure you want to delete field with ID ${fieldId}?`)) return;
 
     $.ajax({
         url: `http://localhost:8082/cms/api/v1/fields/${fieldId}`,
@@ -250,7 +256,7 @@ function deleteField(button) {
         success: (res) => {
             console.log("Field deleted successfully:", res);
             initializeField();
-            reloadOthers()
+            reloadOthers();
         },
         error: (err) => {
             console.error("Error deleting field:", err);
@@ -260,12 +266,9 @@ function deleteField(button) {
 
 let updateFieldId = null;
 
-function editField(button) {
-    if (!confirm(`Are you sure you want to edit staff with ID ${button.value}?`)) return;
+function editField(fieldId) {
+    if (!confirm(`Are you sure you want to edit field with ID ${fieldId}?`)) return;
 
-    const row = button.parentElement.parentElement;
-
-    const fieldId = row.cells[0].textContent;
     updateFieldId = fieldId;
 
     $('#updateFieldBtn').css('display', 'inline');

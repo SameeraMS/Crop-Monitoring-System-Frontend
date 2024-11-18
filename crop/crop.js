@@ -197,32 +197,43 @@ function addCropToTable(crop) {
     const row = document.createElement('tr');
 
     const img = document.createElement('img');
-    img.src = crop.cropImg ? crop.cropImg : "https://images.app.goo.gl/a4CZZG5C3Y4UGcPu6";
+    img.src = crop.cropImg || "https://via.placeholder.com/50";
     img.alt = 'Crop Image';
-    img.style.width = '50px'; // Adjust size as needed
-    img.style.height = '50px'; // Adjust size as needed
+    img.style.width = '50px';
+    img.style.height = '50px';
 
     row.innerHTML = `
         <td>${crop.cropId}</td>
         <td>${crop.commonName}</td>
-        <td></td>
+        <td></td> 
         <td>${crop.category}</td>
         <td>${crop.cropSeason}</td>
-        <td>${crop.fieldId}</td>
-        <td><button value="${crop.cropId}" class="edit-btn" onclick="editCrop(this)">Edit</button></td>
-        <td><button value="${crop.cropId}" class="delete-btn" onclick="deleteCrop(this)">Delete</button></td>
+        <td>${crop.fieldId || "Not Assigned"}</td>
+        <td><button class="edit-btn" data-crop-id="${crop.cropId}">Edit</button></td>
+        <td><button class="delete-btn" data-crop-id="${crop.cropId}">Delete</button></td>
     `;
 
     row.cells[2].appendChild(img);
+
     tableBody.appendChild(row);
 }
 
-function deleteCrop(button) {
-    if (!confirm(`Are you sure you want to delete crop with ID ${button.value}?`)) return;
+document.querySelector('#crop-list tbody').addEventListener('click', (e) => {
+    const target = e.target;
 
-    const row = button.parentElement.parentElement;
+    if (target.classList.contains('edit-btn')) {
+        const cropId = target.getAttribute('data-crop-id');
+        editCrop(cropId);
+    }
 
-    const cropId = row.cells[0].textContent;
+    if (target.classList.contains('delete-btn')) {
+        const cropId = target.getAttribute('data-crop-id');
+        deleteCrop(cropId);
+    }
+});
+
+function deleteCrop(cropId) {
+    if (!confirm(`Are you sure you want to delete crop with ID ${cropId}?`)) return;
 
     $.ajax({
         url: `http://localhost:8082/cms/api/v1/crops/${cropId}`,
@@ -242,12 +253,9 @@ function deleteCrop(button) {
 
 let updateCropId = null;
 
-function editCrop(button) {
-    if (!confirm(`Are you sure you want to edit crop with ID ${button.value}?`)) return;
+function editCrop(cropId) {
+    if (!confirm(`Are you sure you want to edit crop with ID ${cropId}?`)) return;
 
-    const row = button.parentElement.parentElement;
-
-    const cropId = row.cells[0].textContent;
     updateCropId = cropId;
 
     $('#updateCropBtn').css('display', 'inline');
@@ -261,6 +269,7 @@ function editCrop(button) {
         success: (res) => {
             console.log("Crop data fetched successfully:", res);
 
+            // Populate the edit form fields
             document.getElementById('commonName').value = res.commonName;
             document.getElementById('scientificName').value = res.scientificName;
             document.getElementById('cropCategory').value = res.category;

@@ -110,17 +110,28 @@ function addVehicleToTable(vehicle) {
         <td>${vehicle.fuelType}</td>
         <td>${vehicle.vehicleStatus}</td>
         <td>${vehicle.staffId || "Not Assigned"}</td>
-        <td><button class="edit-btn" onclick="editVehicle(this)">Edit</button></td>
-        <td><button class="delete-btn" onclick="deleteVehicle(this)">Delete</button></td>
+        <td><button class="edit-btn" data-vehicle-id="${vehicle.vehicleId}">Edit</button></td>
+        <td><button class="delete-btn" data-vehicle-id="${vehicle.vehicleId}">Delete</button></td>
     `;
 
     tableBody.appendChild(row);
 }
 
-function deleteVehicle(button) {
-    const row = button.parentElement.parentElement;
-    const vehicleId = row.querySelector('td:nth-child(1)').textContent;
+document.querySelector('#vehicle-list tbody').addEventListener('click', (e) => {
+    const target = e.target;
 
+    if (target.classList.contains('edit-btn')) {
+        const vehicleId = target.getAttribute('data-vehicle-id');
+        editVehicle(vehicleId);
+    }
+
+    if (target.classList.contains('delete-btn')) {
+        const vehicleId = target.getAttribute('data-vehicle-id');
+        deleteVehicle(vehicleId);
+    }
+});
+
+function deleteVehicle(vehicleId) {
     if (!confirm(`Are you sure you want to delete the vehicle with ID ${vehicleId}?`)) return;
 
     $.ajax({
@@ -141,10 +152,8 @@ function deleteVehicle(button) {
 
 let updateVehicleId = null;
 
-function editVehicle(button) {
-    const row = button.parentElement.parentElement;
-    const vehicleId = row.querySelector('td:nth-child(1)').textContent;
-
+function editVehicle(vehicleId) {
+    if (!confirm(`Are you sure you want to edit the vehicle with ID ${vehicleId}?`)) return;
     updateVehicleId = vehicleId;
 
     $('#updateVehicleBtn').css('display', 'inline');

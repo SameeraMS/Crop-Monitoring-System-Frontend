@@ -152,6 +152,24 @@
     cursor: pointer;
 }
 
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1em;
+}
+
+#dt-search-5, #dt-search-0, #dt-search-1, #dt-search-4, #dt-search-2, #dt-search-3 {
+    width: 180px;
+    height: 35px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 0 10px;
+    font-size: 16px;
+    outline: none;
+    margin-bottom: 20px;
+}
+
 @media (max-width: 1024px) {
     .weather-details {
         grid-template-columns: repeat(2, 1fr);
