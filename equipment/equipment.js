@@ -1,7 +1,6 @@
-
 initializeEquipment();
 
-function initializeEquipment() {
+export function initializeEquipment() {
     loadEquipmentTable();
     loadStaffOnEquipment();
     loadFieldOnEquipment();

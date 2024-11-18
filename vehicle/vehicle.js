@@ -2,7 +2,7 @@
 
 initializeVehicle();
 
-function initializeVehicle() {
+export function initializeVehicle() {
     loadVehicleTable();
     clearVehicleForm();
     loadStaffOnVehicle();

@@ -1,11 +1,18 @@
 import { initializeStaff } from "../staff/staff.js";
+import { initializeField } from "../field/field.js";
+import { initializeCrop } from "../crop/crop.js";
 
 initializeLog();
 
 function initializeLog() {
     loadLogTable()
     clearForm()
+}
+
+function reloadAll() {
     initializeStaff()
+    initializeField()
+    initializeCrop()
 }
 
 function encodeLogImage(imageFile) {
@@ -62,9 +69,11 @@ document.getElementById('log-form').addEventListener('submit', function(e) {
             var logId = res.logId;
             saveImage(logId, image);
             initializeLog()
+            reloadAll()
         },
         error: (res) => {
             console.error(res);
+            reloadAll()
         }
     });
 
@@ -172,6 +181,7 @@ function deleteLog(logId) {
         success: (res) => {
             console.log('Log deleted successfully:', res);
             initializeLog();
+            reloadAll()
         },
         error: (err) => {
             console.error('Error deleting log:', err);
@@ -237,6 +247,7 @@ $('#updateLogBtn').on('click', () => {
             console.log(res);
             saveImage(updateLogId, image);
             initializeLog()
+            reloadAll()
         },
         error: (res) => {
             console.error(res);

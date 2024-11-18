@@ -1,7 +1,7 @@
 
 initializeCrop();
 
-function initializeCrop() {
+export function initializeCrop() {
     loadCropTable();
     loadFieldIdOnCrop();
     loadLogIdsOnCrop()
@@ -64,7 +64,6 @@ function loadCropTable() {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            console.log(res);
             $('#crop-list tbody').empty();
             res.forEach(crop => {
                 addCropToTable(crop);

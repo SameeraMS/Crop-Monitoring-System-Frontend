@@ -1,3 +1,7 @@
+import {initializeEquipment} from "../equipment/equipment.js";
+import {initializeVehicle} from "../vehicle/vehicle.js";
+
+
 initializeStaff()
 
  export function initializeStaff() {
@@ -5,6 +9,11 @@ initializeStaff()
     loadLogIds()
     loadFieldIds()
     clearStaffForm()
+}
+
+function addStaffInOthers(){
+    initializeEquipment()
+    initializeVehicle()
 }
 
 function loadFieldIds() {
@@ -16,7 +25,6 @@ function loadFieldIds() {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            console.log(res);
             const fieldIds = res.map(field => field.fieldId);
             const fieldIdSelect = document.getElementById('fieldIdOnStaff');
             $('#fieldIdOnStaff').empty();
@@ -64,7 +72,6 @@ function loadLogIds() {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            console.log(res);
             const logIds = res.map(log => log.logId);
             const logIdSelect = document.getElementById('logIdStaff');
             $('#logIdStaff').empty();
@@ -142,9 +149,11 @@ document.getElementById('staff-form').addEventListener('submit', function(e) {
                 saveStaffAndField(res.staffId, fieldId)
             }
             initializeStaff()
+            addStaffInOthers()
         },
         error: (res) => {
             console.error(res);
+            initializeStaff()
         }
     });
 
@@ -215,6 +224,7 @@ function deleteStaff(staffId) {
         success: (res) => {
             console.log('Staff deleted successfully:', res);
             initializeStaff();
+            addStaffInOthers()
         },
         error: (err) => {
             console.error('Error deleting staff:', err);
@@ -324,6 +334,7 @@ $('#updateStaffBtn').on('click', () => {
         success: (res) => {
             console.log(res);
             initializeStaff()
+            addStaffInOthers()
         },
         error: (res) => {
             console.error(res);

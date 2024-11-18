@@ -21,6 +21,7 @@ function getUserDetails() {
         },
         success: function (response) {
             userRole = response.role;
+            document.getElementById('profile').textContent = userRole;
             userPassword = response.password;
             document.getElementById('roleForSettings').value = userRole;
         },

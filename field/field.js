@@ -1,9 +1,18 @@
+import {initializeCrop} from "../crop/crop.js";
+import {initializeStaff} from "../staff/staff.js";
+import {initializeEquipment} from "../equipment/equipment.js";
 
 initializeField();
 
-function initializeField() {
+export function initializeField() {
     loadFieldTable();
     loadLogIdsOnField();
+}
+
+function reloadOthers() {
+    initializeCrop()
+    initializeStaff()
+    initializeEquipment()
 }
 
 function encodeFieldImage(imageFile) {
@@ -157,10 +166,12 @@ document.getElementById('field-form').addEventListener('submit', function(e) {
             var fieldId = res.fieldId;
             saveFieldImage(fieldId, image1, image2);
             initializeField();
+            reloadOthers()
             clearFieldForm();
         },
         error: (res) => {
             console.error(res);
+            reloadOthers()
         }
     });
 
@@ -239,6 +250,7 @@ function deleteField(button) {
         success: (res) => {
             console.log("Field deleted successfully:", res);
             initializeField();
+            reloadOthers()
         },
         error: (err) => {
             console.error("Error deleting field:", err);
@@ -334,9 +346,11 @@ $('#updateFieldBtn').on('click', () => {
             console.log(res);
             saveFieldImage(updateFieldId, image1, image2);
             initializeField();
+            reloadOthers()
         },
         error: (res) => {
             console.error(res);
+            initializeField()
         }
     });
 })
