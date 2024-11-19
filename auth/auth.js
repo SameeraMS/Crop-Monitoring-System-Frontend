@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 error: (xhr, status, error) => {
                     console.log(xhr.responseText);
+                    alert("Incorrect Email or Password!");
                 }
             });
 

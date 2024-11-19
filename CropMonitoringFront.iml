@@ -6,5 +6,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="dataTables.bootstrap5" level="application" />
     <orderEntry type="library" name="dataTables" level="application" />
+    <orderEntry type="library" name="dropzone" level="application" />
   </component>
 </module>
