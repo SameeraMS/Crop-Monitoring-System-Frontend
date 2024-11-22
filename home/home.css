@@ -170,6 +170,42 @@
     margin-bottom: 20px;
 }
 
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+}
+
+textarea {
+    resize: vertical;
+}
+
+.add-btn, .update-btn{
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.add-btn, .update-btn:hover {
+    background-color: #0b8a43;
+}
+
 @media (max-width: 1024px) {
     .weather-details {
         grid-template-columns: repeat(2, 1fr);
