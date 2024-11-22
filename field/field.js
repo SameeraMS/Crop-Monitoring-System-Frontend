@@ -4,6 +4,35 @@ import {initializeEquipment} from "../equipment/equipment.js";
 
 initializeField();
 
+const map = L.map('map').setView([6.698066, 79.911289], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19
+}).addTo(map);
+
+let marker = L.marker([6.698066, 79.911289]).addTo(map);
+
+map.on('click', function(e) {
+    const { lat, lng } = e.latlng;
+    document.getElementById('latitude').value = lat.toFixed(6);
+    document.getElementById('longitude').value = lng.toFixed(6);
+
+    marker.setLatLng([lat, lng]);
+});
+
+$('#goToLocation').on('click', function(e) {
+    e.preventDefault();
+    const lat = parseFloat(document.getElementById('latitude').value);
+    const lng = parseFloat(document.getElementById('longitude').value);
+
+    if (!isNaN(lat) && !isNaN(lng)) {
+        map.setView([lat, lng], 13);
+        marker.setLatLng([lat, lng]);
+    } else {
+        toastr.error('Please enter valid latitude and longitude values.');
+    }
+});
+
 export function initializeField() {
     loadFieldTable();
     loadLogIdsOnField();
@@ -19,7 +48,7 @@ function encodeFieldImage(imageFile) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = function (event) {
-            resolve(event.target.result); // Ensure 'event' is correctly passed
+            resolve(event.target.result);
         };
         reader.onerror = function (error) {
             reject(error); // Handle errors properly
@@ -36,11 +65,12 @@ function loadFieldTable() {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
+            $('#field-list').DataTable().destroy();
             $('#field-list tbody').empty();
             res.forEach(field => {
                 addFieldToTable(field);
             });
-            new DataTable("#field-list", {paging: false, pageLength: 100, destroy: false});
+            new DataTable("#field-list", {paging: false, pageLength: 100, destroy: true});
         },
         error: (res) => {
             console.error(res);
@@ -104,11 +134,12 @@ function loadLogIdsOnField() {
     });
 }
 
-document.getElementById('field-form').addEventListener('submit', function(e) {
+$('#saveFieldBtn').on('click', (e) => {
     e.preventDefault();
 
     const fieldName = document.getElementById('fieldName').value;
-    let fieldLocation = document.getElementById('fieldLocation').value;
+    let latitude = document.getElementById('latitude').value;
+    let longitude = document.getElementById('longitude').value
     const fieldSize = document.getElementById('fieldSize').value;
     let imageFile1 = document.getElementById('image1').files[0];
     let imageFile2 = document.getElementById('image2').files[0];
@@ -144,7 +175,7 @@ document.getElementById('field-form').addEventListener('submit', function(e) {
     })();
 
 
-    fieldLocation = extractCoordinates(fieldLocation);
+    let fieldLocation = extractCoordinates(latitude, longitude);
 
     const field = {
         fieldName,
@@ -178,9 +209,7 @@ document.getElementById('field-form').addEventListener('submit', function(e) {
 
 });
 
-function extractCoordinates(input) {
-    const cleanedInput = input.replace(/\s+/g, ''); // Remove all spaces
-    const [lat, lon] = cleanedInput.split(',');     // Split into latitude and longitude
+function extractCoordinates(lat,lon) {
 
     return {
         x: parseFloat(lat),
@@ -283,7 +312,8 @@ function editField(fieldId) {
             console.log("Field data fetched successfully:", res);
 
             document.getElementById('fieldName').value = res.fieldName;
-            document.getElementById('fieldLocation').value = `${res.fieldLocation.x}, ${res.fieldLocation.y}`;
+            document.getElementById('latitude').value = `${res.fieldLocation.x}`;
+            document.getElementById('longitude').value = `${res.fieldLocation.y}`;
             document.getElementById('fieldSize').value = res.fieldSize;
 
             $('#logIdOnField').val(res.logId || 'Select Log');
@@ -297,11 +327,13 @@ function editField(fieldId) {
 
 $('#updateFieldBtn').on('click', () => {
     const fieldName = document.getElementById('fieldName').value;
-    let fieldLocation = document.getElementById('fieldLocation').value;
+    let latitude = document.getElementById('latitude').value;
+    let longitude = document.getElementById('longitude').value;
     const fieldSize = document.getElementById('fieldSize').value;
     const logId = document.getElementById('logIdOnField').value;
     let imageFile1 = document.getElementById('image1').files[0];
     let imageFile2 = document.getElementById('image2').files[0];
+
 
     let image1 = null;
     let image2 = null;
@@ -328,7 +360,7 @@ $('#updateFieldBtn').on('click', () => {
         }
     })();
 
-    fieldLocation = extractCoordinates(fieldLocation);
+    let fieldLocation = extractCoordinates(latitude, longitude);
 
     const field = {
         fieldName,
