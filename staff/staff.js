@@ -51,11 +51,12 @@ function loadStaffTable() {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
+            $('#staff-list').DataTable().destroy();
             $('#staff-list tbody').empty();
             res.forEach(staff => {
                 addStaffToTable(staff);
             });
-            new DataTable("#staff-list", {paging: false, pageLength: 100, destroy: false});
+            new DataTable("#staff-list", {paging: false, pageLength: 100, destroy: true});
         },
         error: (res) => {
             console.error(res);

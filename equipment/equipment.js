@@ -63,11 +63,12 @@ function loadEquipmentTable() {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
+            $('#equipment-list').DataTable().destroy();
             $('#equipment-list tbody').empty();
             res.forEach(equipment => {
                 addEquipmentToTable(equipment);
             });
-            new DataTable("#equipment-list", {paging: false, pageLength: 100, destroy: false});
+            new DataTable("#equipment-list", {paging: false, pageLength: 100, destroy: true});
         },
         error: (res) => {
             console.error(res);

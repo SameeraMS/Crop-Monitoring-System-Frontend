@@ -64,11 +64,12 @@ function loadCropTable() {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
+            $('#crop-list').DataTable().destroy();
             $('#crop-list tbody').empty();
             res.forEach(crop => {
                 addCropToTable(crop);
             });
-            new DataTable("#crop-list", {paging: false, pageLength: 100, destroy: false});
+            new DataTable("#crop-list", {paging: false, pageLength: 100, destroy: true});
         },
         error: (res) => {
             console.error(res);

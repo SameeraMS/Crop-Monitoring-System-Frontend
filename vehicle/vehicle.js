@@ -46,11 +46,12 @@ function loadVehicleTable() {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
+            $('#vehicle-list').DataTable().destroy();
             $('#vehicle-list tbody').empty();
             res.forEach(vehicle => {
                 addVehicleToTable(vehicle);
             });
-            new DataTable("#vehicle-list", {paging: false, pageLength: 100, destroy: false});
+            new DataTable("#vehicle-list", {paging: false, pageLength: 100, destroy: true});
         },
         error: (res) => {
             console.error(res);
