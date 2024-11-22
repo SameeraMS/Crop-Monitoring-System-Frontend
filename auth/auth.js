@@ -46,11 +46,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.cookie = "token=" + response.token;
                     localStorage.setItem('token', response.token);
                     localStorage.setItem('user', email);
-                    window.location.href = 'home/home.html';
+                    toastr.success('welcome to the system!', 'Login successful!');
+                    setTimeout(() => {
+                        window.location.href = 'home/home.html';
+                    }, 1000);
                 },
                 error: (xhr, status, error) => {
-                    console.log(xhr.responseText);
-                    alert("Incorrect Email or Password!");
+                    let statusCode = xhr.status;
+
+                    if (statusCode === 403) {
+                        toastr.error('username or password is incorrect!', 'Login failed!');
+                    } else if (statusCode === 404) {
+                        toastr.error('System is under maintenance!', 'Login failed!');
+                    }
+
                 }
             });
 
@@ -106,10 +115,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.cookie = "token=" + response.token;
                     localStorage.setItem('token', response.token);
                     localStorage.setItem('user', email);
-                    window.location.href = '../home/home.html';
+                    toastr.success('welcome to the system!', 'Signup successful!');
+                    setTimeout(() => {
+                        window.location.href = '../home/home.html';
+                    }, 1000);
                 },
                 error: (xhr, status, error) => {
-                    console.log(xhr.responseText);
+                    let statusCode = xhr.status;
+
+                    if (statusCode === 401) {
+                        toastr.error('Role Code is incorrect!', 'Signup failed!');
+                    } else if (statusCode === 404) {
+                        toastr.error('System is under maintenance!', 'Signup failed!');
+                    }
+
                 }
             });
 

@@ -109,6 +109,7 @@ function saveCropImage(cropId, image) {
             success: (res) => {
                 console.log(res);
                 initializeCrop()
+
             },
             error: (res) => {
                 console.error(res);
@@ -179,9 +180,15 @@ document.getElementById('crop-form').addEventListener('submit', function(e) {
             var cropId = res.cropId;
             saveCropImage(cropId, image);
             initializeCrop()
+            Swal.fire({
+                title: "Success!",
+                text: "Crop added successfully!",
+                icon: "success",
+            });
         },
         error: (res) => {
             console.error(res);
+            toastr.error("Crop not added! Please try again.");
         }
     });
 
@@ -233,55 +240,113 @@ document.querySelector('#crop-list tbody').addEventListener('click', (e) => {
 });
 
 function deleteCrop(cropId) {
-    if (!confirm(`Are you sure you want to delete crop with ID ${cropId}?`)) return;
+    Swal.fire({
+        title: 'Are you sure?',
+        text: `You want to delete crop with ID ${cropId}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `http://localhost:8082/cms/api/v1/crops/${cropId}`,
+                type: "DELETE",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                success: (res) => {
+                    Swal.fire(
+                        'Deleted!',
+                        `Crop with ID ${cropId} has been deleted.`,
+                        'success'
+                    );
+                    initializeCrop();
+                },
+                error: (err) => {
+                    Swal.fire(
+                        'Cancelled',
+                        `Crop with ID ${cropId} could not be deleted.`,
+                        'error'
+                    );
+                }
+            });
 
-    $.ajax({
-        url: `http://localhost:8082/cms/api/v1/crops/${cropId}`,
-        type: "DELETE",
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
-        },
-        success: (res) => {
-            console.log("Crop deleted successfully:", res);
-            initializeCrop();
-        },
-        error: (err) => {
-            console.error("Error deleting crop:", err);
+        } else {
+            Swal.fire(
+                'Cancelled',
+                `Crop with ID ${cropId} could not be deleted.`,
+                'error'
+            );
         }
     });
+
+
+
 }
 
 let updateCropId = null;
 
 function editCrop(cropId) {
-    if (!confirm(`Are you sure you want to edit crop with ID ${cropId}?`)) return;
 
-    updateCropId = cropId;
+    Swal.fire({
+        title: 'Are you sure?',
+        text: `Do you want to edit the crop with ID ${cropId}?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, edit it!',
+        cancelButtonText: 'No, cancel!'
+    }).then((result) => {
+        if (result.isConfirmed) {
 
-    $('#updateCropBtn').css('display', 'inline');
+            updateCropId = cropId;
 
-    $.ajax({
-        url: `http://localhost:8082/cms/api/v1/crops/${cropId}`,
-        type: "GET",
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
-        },
-        success: (res) => {
-            console.log("Crop data fetched successfully:", res);
+            $('#updateCropBtn').css('display', 'inline');
 
-            // Populate the edit form fields
-            document.getElementById('commonName').value = res.commonName;
-            document.getElementById('scientificName').value = res.scientificName;
-            document.getElementById('cropCategory').value = res.category;
-            document.getElementById('cropSeason').value = res.cropSeason;
+            $.ajax({
+                url: `http://localhost:8082/cms/api/v1/crops/${cropId}`,
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                success: (res) => {
+                    console.log("Crop data fetched successfully:", res);
 
-            document.getElementById('fieldIdOnCrop').value = res.fieldId || 'Select Field';
-            document.getElementById('logIdOnCrop').value = res.logId || 'Select Log';
-        },
-        error: (err) => {
-            console.error("Error fetching crop data:", err);
+                    document.getElementById('commonName').value = res.commonName;
+                    document.getElementById('scientificName').value = res.scientificName;
+                    document.getElementById('cropCategory').value = res.category;
+                    document.getElementById('cropSeason').value = res.cropSeason;
+
+                    document.getElementById('fieldIdOnCrop').value = res.fieldId || 'Select Field';
+                    document.getElementById('logIdOnCrop').value = res.logId || 'Select Log';
+
+                },
+                error: (err) => {
+                    console.error("Error fetching crop data:", err);
+                    Swal.fire(
+                        'Cancelled',
+                        `something went wrong`,
+                        'info'
+                    );
+                }
+            });
+
+        } else {
+
+            Swal.fire(
+                'Cancelled',
+                `Crop with ID ${cropId} remains unchanged.`,
+                'info'
+            );
         }
     });
+
+
+
 }
 
 
@@ -341,9 +406,15 @@ $('#updateCropBtn').on('click', function() {
             console.log(res);
             saveCropImage(updateCropId, image);
             initializeCrop()
+            Swal.fire({
+                title: "Success!",
+                text: "Crop Updated successfully!",
+                icon: "success",
+            });
         },
         error: (res) => {
             console.error(res);
+            toastr.error("Crop not Updated! Please try again.");
         }
     });
 });
