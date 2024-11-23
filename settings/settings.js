@@ -26,6 +26,7 @@ function getUserDetails() {
             document.getElementById('roleForSettings').value = userRole;
         },
         error: function (error) {
+            toast.error("cannot fetch user details");
             console.log(error);
         }
     });
@@ -58,26 +59,24 @@ $('#saveSettingsBtn').on('click', function (e) {
         },
         data: JSON.stringify(user),
         success: function (response) {
-            console.log("User updated successfully:", response);
             initializeSettings();
-            alert("Role saved successfully!");
+            swal.fire('Success!', 'User Role updated successfully', 'success');
         },
         error: function (error) {
             console.log(error);
             initializeSettings()
+            toast.error("User Role Update Failed!");
         }
     });
 
 
 });
 
-// Change Password
 $('#changePasswordBtn').on('click', function (e) {
     const currentPassword = document.getElementById('currentPassword').value;
     const newPassword = document.getElementById('newPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
 
-    // Password Validation
     if (newPassword !== confirmPassword) {
         alert("New password and confirmation do not match!");
     }
@@ -101,7 +100,6 @@ $('#changePasswordBtn').on('click', function (e) {
         headers: { "Content-Type": "application/json" },
         success: (response) => {
             const password = newPassword;
-            const role = userRole;
 
             const user = {
                 email,
@@ -117,19 +115,18 @@ $('#changePasswordBtn').on('click', function (e) {
                 },
                 data: JSON.stringify(user),
                 success: function (response) {
-                    console.log("User updated successfully:", response);
                     initializeSettings();
-                    alert("Password Updated successfully!");
+                    swal.fire('Success!', 'Password updated successfully', 'success');
                 },
                 error: function (error) {
-                    console.log(error);
+                    toast.error("Password Update Failed!");
                     initializeSettings()
                 }
             });
         },
         error: (xhr, status, error) => {
             console.log(xhr.responseText);
-            alert("Incorrect Password!");
+            swal.fire('Error!', 'Invalid current password', 'error');
         }
     });
 
@@ -173,19 +170,20 @@ $('#deleteAccountBtn').on('click', function (e) {
                     "Authorization": "Bearer " + localStorage.getItem('token')
                 },
                 success: function (response) {
-                    console.log("User deleted successfully:", response);
+                    swal.fire('Success!', 'Account deleted successfully', 'success');
                     localStorage.removeItem('token');
                     localStorage.removeItem('user');
                     window.location.href = "../index.html";
                 },
                 error: function (error) {
+                    toast.error("Account Deletion Failed!");
                     console.log(error);
                 }
             });
         },
         error: (xhr, status, error) => {
             console.log(xhr.responseText);
-            alert("Incorrect Password!");
+            toast.error("Incorrect Password!");
         }
     });
 

@@ -112,8 +112,10 @@ document.getElementById('equipment-form').addEventListener('submit', function(e)
         success: (res) => {
             console.log(res);
             initializeEquipment();
+            swal.fire('Success', 'Equipment saved successfully', 'success');
         },
         error: (res) => {
+            toastr.error("cannot save equipment");
             console.error(res);
         }
     });
@@ -161,53 +163,81 @@ document.querySelector('#equipment-list tbody').addEventListener('click', (e) =>
 });
 
 function deleteEquipment(equipmentId) {
-    if (!confirm(`Are you sure you want to delete equipment with ID ${equipmentId}?`)) return;
-
-    $.ajax({
-        url: `http://localhost:8082/cms/api/v1/equipments/${equipmentId}`,
-        type: "DELETE",
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
-        },
-        success: (res) => {
-            console.log("Equipment deleted successfully:", res);
-            initializeEquipment();
-        },
-        error: (err) => {
-            console.error("Error deleting equipment:", err);
+    Swal.fire({
+        title: `Are you sure?`,
+        text: `You are about to delete equipment with ID ${equipmentId}. This action cannot be undone.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `http://localhost:8082/cms/api/v1/equipments/${equipmentId}`,
+                type: "DELETE",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                success: (res) => {
+                    Swal.fire(
+                        'Deleted!',
+                        'The equipment has been deleted.',
+                        'success'
+                    );
+                    initializeEquipment();
+                },
+                error: (err) => {
+                    toastr.error("cannot delete equipment");
+                    console.error("Error deleting equipment:", err);
+                }
+            });
         }
     });
+
 }
 
 let updateEquipmentId = null;
 
 function editEquipment(equipmentId) {
-    if (!confirm(`Are you sure you want to edit equipment with ID ${equipmentId}?`)) return;
+    Swal.fire({
+        title: `Are you sure?`,
+        text: `You are about to edit equipment with ID ${equipmentId}.`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, edit it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            updateEquipmentId = equipmentId;
 
-    updateEquipmentId = equipmentId;
+            $('#updateEquipmentBtn').css('display', 'inline');
 
-    $('#updateEquipmentBtn').css('display', 'inline');
+            $.ajax({
+                url: `http://localhost:8082/cms/api/v1/equipments/${equipmentId}`,
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                success: (res) => {
+                    document.getElementById('equipmentName').value = res.equipmentName;
+                    document.getElementById('equipmentType').value = res.equipmentType;
+                    document.getElementById('equipmentStatus').value = res.equipmentStatus;
 
-    $.ajax({
-        url: `http://localhost:8082/cms/api/v1/equipments/${equipmentId}`,
-        type: "GET",
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
-        },
-        success: (res) => {
-            console.log("Equipment data fetched successfully:", res);
-
-            document.getElementById('equipmentName').value = res.equipmentName;
-            document.getElementById('equipmentType').value = res.equipmentType;
-            document.getElementById('equipmentStatus').value = res.equipmentStatus;
-
-            $('#staffIdOnEquipment').val(res.staffId || 'Select Staff');
-            $('#fieldIdOnEquipment').val(res.fieldId || 'Select Field');
-        },
-        error: (err) => {
-            console.error("Error fetching equipment data:", err);
+                    $('#staffIdOnEquipment').val(res.staffId || 'Select Staff');
+                    $('#fieldIdOnEquipment').val(res.fieldId || 'Select Field');
+                },
+                error: (err) => {
+                    toastr.error("cannot fetch equipment");
+                    console.error("Error fetching equipment data:", err);
+                }
+            });
         }
     });
+
 }
 
 

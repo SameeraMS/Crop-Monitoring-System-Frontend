@@ -65,13 +65,14 @@ document.getElementById('log-form').addEventListener('submit', function(e) {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            console.log(res);
             var logId = res.logId;
             saveImage(logId, image);
             initializeLog()
             reloadAll()
+            swal.fire('Success!','Log saved successfully','success');
         },
         error: (res) => {
+            toastr.error("cannot save log");
             console.error(res);
             reloadAll()
         }
@@ -99,10 +100,12 @@ function saveImage(logId, image) {
                 "Authorization": "Bearer " + localStorage.getItem('token')
             },
             success: (res) => {
+                toastr.success("Log image saved successfully");
                 console.log(res);
                 initializeLog()
             },
             error: (res) => {
+                toastr.warning("cannot save log image");
                 console.error(res);
             }
         });
@@ -128,6 +131,7 @@ function loadLogTable() {
             new DataTable("#log-list", {paging: false, pageLength: 100, destroy: true});
         },
         error: (res) => {
+            toastr.error("cannot load log table");
             console.error(res);
         }
     });
@@ -171,42 +175,73 @@ document.querySelector('#log-list tbody').addEventListener('click', (e) => {
 });
 
 function deleteLog(logId) {
-    if (!confirm(`Are you sure you want to delete log with ID ${logId}?`)) return;
+    Swal.fire({
+        title: `Are you sure?`,
+        text: `You are about to delete the log with ID ${logId}. This action cannot be undone.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `http://localhost:8082/cms/api/v1/logs/${logId}`,
+                type: "DELETE",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                success: (res) => {
+                    Swal.fire(
+                        'Deleted!',
+                        `Log with ID ${logId} has been deleted successfully.`,
+                        'success'
+                    );
 
-    $.ajax({
-        url: `http://localhost:8082/cms/api/v1/logs/${logId}`,
-        type: "DELETE",
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
-        },
-        success: (res) => {
-            console.log('Log deleted successfully:', res);
-            initializeLog();
-            reloadAll()
-        },
-        error: (err) => {
-            console.error('Error deleting log:', err);
-            alert('Failed to delete log. Please try again.');
+                    console.log('Log deleted successfully:', res);
+                    initializeLog();
+                    reloadAll();
+                },
+                error: (err) => {
+                    toastr.error("cannot delete log");
+                    console.error('Error deleting log:', err);
+                }
+            });
         }
     });
+
 }
 
 let updateLogId = null;
 
 function editLog(logId) {
-    if (!confirm(`Are you sure you want to edit log with ID ${logId}?`)) return;
+    Swal.fire({
+        title: `Are you sure?`,
+        text: `You are about to edit the log with ID ${logId}.`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, edit it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            updateLogId = logId;
 
-    updateLogId = logId;
+            const row = document.querySelector(`#log-list tbody tr td button[value="${logId}"]`).closest('tr');
 
-    const row = document.querySelector(`#log-list tbody tr td button[value="${logId}"]`).closest('tr');
+            const logDate = row.cells[1].textContent;
+            const logDetails = row.cells[2].textContent;
 
-    const logDate = row.cells[1].textContent;
-    const logDetails = row.cells[2].textContent;
+            document.getElementById('logDate').value = logDate;
+            document.getElementById('logDetails').value = logDetails;
 
-    document.getElementById('logDate').value = logDate;
-    document.getElementById('logDetails').value = logDetails;
+            $('#updateLogBtn').css('display', 'inline');
 
-    $('#updateLogBtn').css('display', 'inline');
+        }
+    });
+
 }
 
 
@@ -245,12 +280,13 @@ $('#updateLogBtn').on('click', () => {
         data: JSON.stringify(log),
         contentType: "application/json",
         success: (res) => {
-            console.log(res);
             saveImage(updateLogId, image);
             initializeLog()
             reloadAll()
+            swal.fire('Success!', 'Log updated successfully', 'success');
         },
         error: (res) => {
+            toastr.error("cannot update log");
             console.error(res);
         }
     });

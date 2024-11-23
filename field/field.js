@@ -73,6 +73,7 @@ function loadFieldTable() {
             new DataTable("#field-list", {paging: false, pageLength: 100, destroy: true});
         },
         error: (res) => {
+            toastr.error("cannot load fields");
             console.error(res);
         }
     });
@@ -98,8 +99,10 @@ function saveFieldImage(fieldId, image1, image2) {
             success: (res) => {
                 console.log(res);
                 initializeField()
+                toastr.success("Field image saved successfully");
             },
             error: (res) => {
+                toastr.error("cannot save field image");
                 console.error(res);
             }
         });
@@ -193,15 +196,16 @@ $('#saveFieldBtn').on('click', (e) => {
         data: JSON.stringify(field),
         contentType: "application/json",
         success: (res) => {
-            console.log(res);
             var fieldId = res.fieldId;
             saveFieldImage(fieldId, image1, image2);
             initializeField();
             reloadOthers()
             clearFieldForm();
+            swal.fire('Success!','Field saved successfully','success');
         },
         error: (res) => {
             console.error(res);
+            toastr.error("cannot save field");
             reloadOthers()
         }
     });
@@ -274,54 +278,81 @@ document.querySelector('#field-list tbody').addEventListener('click', (e) => {
 });
 
 function deleteField(fieldId) {
-    if (!confirm(`Are you sure you want to delete field with ID ${fieldId}?`)) return;
-
-    $.ajax({
-        url: `http://localhost:8082/cms/api/v1/fields/${fieldId}`,
-        type: "DELETE",
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
-        },
-        success: (res) => {
-            console.log("Field deleted successfully:", res);
-            initializeField();
-            reloadOthers();
-        },
-        error: (err) => {
-            console.error("Error deleting field:", err);
+    Swal.fire({
+        title: `Are you sure?`,
+        text: `You are about to delete the field with ID ${fieldId}. This action cannot be undone.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `http://localhost:8082/cms/api/v1/fields/${fieldId}`,
+                type: "DELETE",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                success: (res) => {
+                    Swal.fire(
+                        'Deleted!',
+                        `Field with ID ${fieldId} has been deleted successfully.`,
+                        'success'
+                    );
+                    initializeField();
+                    reloadOthers();
+                },
+                error: (err) => {
+                    toastr.error("cannot delete field");
+                }
+            });
         }
     });
+
 }
 
 let updateFieldId = null;
 
 function editField(fieldId) {
-    if (!confirm(`Are you sure you want to edit field with ID ${fieldId}?`)) return;
+    Swal.fire({
+        title: `Are you sure?`,
+        text: `You are about to edit the field with ID ${fieldId}.`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, edit it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            updateFieldId = fieldId;
 
-    updateFieldId = fieldId;
+            $('#updateFieldBtn').css('display', 'inline');
 
-    $('#updateFieldBtn').css('display', 'inline');
+            $.ajax({
+                url: `http://localhost:8082/cms/api/v1/fields/${fieldId}`,
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                success: (res) => {
+                    document.getElementById('fieldName').value = res.fieldName;
+                    document.getElementById('latitude').value = `${res.fieldLocation.x}`;
+                    document.getElementById('longitude').value = `${res.fieldLocation.y}`;
+                    document.getElementById('fieldSize').value = res.fieldSize;
 
-    $.ajax({
-        url: `http://localhost:8082/cms/api/v1/fields/${fieldId}`,
-        type: "GET",
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
-        },
-        success: (res) => {
-            console.log("Field data fetched successfully:", res);
-
-            document.getElementById('fieldName').value = res.fieldName;
-            document.getElementById('latitude').value = `${res.fieldLocation.x}`;
-            document.getElementById('longitude').value = `${res.fieldLocation.y}`;
-            document.getElementById('fieldSize').value = res.fieldSize;
-
-            $('#logIdOnField').val(res.logId || 'Select Log');
-        },
-        error: (err) => {
-            console.error("Error fetching field data:", err);
+                    $('#logIdOnField').val(res.logId || 'Select Log');
+                },
+                error: (err) => {
+                    toastr.error("cannot edit field");
+                    console.error("Error fetching field data:", err);
+                }
+            });
         }
     });
+
 }
 
 
@@ -378,14 +409,15 @@ $('#updateFieldBtn').on('click', () => {
         data: JSON.stringify(field),
         contentType: "application/json",
         success: (res) => {
-            console.log(res);
             saveFieldImage(updateFieldId, image1, image2);
             initializeField();
             reloadOthers()
+            swal.fire('Success!','Field updated successfully','success');
         },
         error: (res) => {
             console.error(res);
             initializeField()
+            toastr.error("cannot update field");
         }
     });
 })

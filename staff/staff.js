@@ -37,6 +37,7 @@ function loadFieldIds() {
             });
         },
         error: (res) => {
+            toast.error("cannot load field ids");
             console.error(res);
         }
     });
@@ -59,6 +60,7 @@ function loadStaffTable() {
             new DataTable("#staff-list", {paging: false, pageLength: 100, destroy: true});
         },
         error: (res) => {
+            toast.error("cannot load staff table");
             console.error(res);
         }
     });
@@ -145,16 +147,17 @@ document.getElementById('staff-form').addEventListener('submit', function(e) {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            console.log(res);
             if (fieldId != null) {
                 saveStaffAndField(res.staffId, fieldId)
             }
             initializeStaff()
             addStaffInOthers()
+            swal.fire('Success', 'Staff saved successfully', 'success');
         },
         error: (res) => {
             console.error(res);
             initializeStaff()
+            toast.error("cannot save staff");
         }
     });
 
@@ -177,9 +180,11 @@ function saveStaffAndField(staffId, fieldId) {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
+            toast.success("Staff and field saved successfully");
             console.log(res);
         },
         error: (res) => {
+            toast.error("cannot save staff and field");
             console.error(res);
         }
     });
@@ -214,64 +219,93 @@ document.querySelector('#staff-list tbody').addEventListener('click', (e) => {
 });
 
 function deleteStaff(staffId) {
-    if (!confirm(`Are you sure you want to delete staff with ID ${staffId}?`)) return;
+    Swal.fire({
+        title: `Are you sure?`,
+        text: `You are about to delete the staff member with ID ${staffId}. This action cannot be undone.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `http://localhost:8082/cms/api/v1/staffs/${staffId}`,
+                type: "DELETE",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                success: (res) => {
+                    Swal.fire(
+                        'Deleted!',
+                        `Staff member with ID ${staffId} has been deleted successfully.`,
+                        'success'
+                    );
 
-    $.ajax({
-        url: `http://localhost:8082/cms/api/v1/staffs/${staffId}`,
-        type: "DELETE",
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
-        },
-        success: (res) => {
-            console.log('Staff deleted successfully:', res);
-            initializeStaff();
-            addStaffInOthers()
-        },
-        error: (err) => {
-            console.error('Error deleting staff:', err);
-            alert('Failed to delete staff. Please try again.');
+                    initializeStaff();
+                    addStaffInOthers();
+                },
+                error: (err) => {
+                    toast.error("cannot delete staff");
+                    console.error('Error deleting staff:', err);
+                }
+            });
         }
     });
+
 }
 
 let updateStaffId = null;
 
 function editStaff(staffId) {
-    if (!confirm(`Are you sure you want to edit staff with ID ${staffId}?`)) return;
+    Swal.fire({
+        title: `Are you sure?`,
+        text: `You are about to edit the staff member with ID ${staffId}.`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, edit it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `http://localhost:8082/cms/api/v1/staffs/${staffId}`,
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                success: (res) => {
+                    console.log('Staff details fetched:', res);
+                    updateStaffId = res.staffId;
 
-    $.ajax({
-        url: `http://localhost:8082/cms/api/v1/staffs/${staffId}`,
-        type: "GET",
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
-        },
-        success: (res) => {
-            console.log('Staff details fetched:', res);
-            updateStaffId = res.staffId;
+                    document.getElementById('firstName').value = res.firstName;
+                    document.getElementById('lastName').value = res.lastName;
+                    document.getElementById('designation').value = res.designation;
+                    document.getElementById('gender').value = res.gender;
+                    document.getElementById('joinedDate').value = res.joinedDate.split('T')[0];
+                    document.getElementById('dob').value = res.dob.split('T')[0];
+                    document.getElementById('buildingNo').value = res.buildingNo;
+                    document.getElementById('lane').value = res.lane;
+                    document.getElementById('city').value = res.city;
+                    document.getElementById('state').value = res.state;
+                    document.getElementById('postalcode').value = res.postalcode;
+                    document.getElementById('contactNo').value = res.contactNo;
+                    document.getElementById('email').value = res.email;
+                    document.getElementById('role').value = res.role;
+                    document.getElementById('logIdStaff').value = res.logId;
 
-            document.getElementById('firstName').value = res.firstName;
-            document.getElementById('lastName').value = res.lastName;
-            document.getElementById('designation').value = res.designation;
-            document.getElementById('gender').value = res.gender;
-            document.getElementById('joinedDate').value = res.joinedDate.split('T')[0];
-            document.getElementById('dob').value = res.dob.split('T')[0];
-            document.getElementById('buildingNo').value = res.buildingNo;
-            document.getElementById('lane').value = res.lane;
-            document.getElementById('city').value = res.city;
-            document.getElementById('state').value = res.state;
-            document.getElementById('postalcode').value = res.postalcode;
-            document.getElementById('contactNo').value = res.contactNo;
-            document.getElementById('email').value = res.email;
-            document.getElementById('role').value = res.role;
-            document.getElementById('logIdStaff').value = res.logId;
-
-            $('#updateStaffBtn').css('display', 'inline');
-        },
-        error: (err) => {
-            console.error('Error fetching staff details:', err);
-            alert('Failed to fetch staff details. Please try again.');
+                    $('#updateStaffBtn').css('display', 'inline');
+                },
+                error: (err) => {
+                    console.error('Error fetching staff details:', err);
+                    toast.error("cannot fetch staff");
+                }
+            });
         }
     });
+
 }
 
 
@@ -333,11 +367,12 @@ $('#updateStaffBtn').on('click', () => {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            console.log(res);
             initializeStaff()
             addStaffInOthers()
+            swal.fire('Success', 'Staff updated successfully', 'success');
         },
         error: (res) => {
+            toast.error("cannot update staff");
             console.error(res);
         }
     });
