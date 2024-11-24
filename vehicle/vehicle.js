@@ -54,6 +54,7 @@ function loadVehicleTable() {
             new DataTable("#vehicle-list", {paging: false, pageLength: 100, destroy: true});
         },
         error: (res) => {
+            toastr.error("cannot load vehicle table");
             console.error(res);
         }
     });
@@ -91,10 +92,11 @@ document.getElementById('vehicle-form').addEventListener('submit', function(e) {
         data: JSON.stringify(vehicle),
         contentType: "application/json",
         success: (res) => {
-            console.log(res);
             initializeVehicle();
+            swal.fire('Success!', 'Vehicle added successfully','success');
         },
         error: (res) => {
+            toastr.error("cannot add vehicle");
             console.error(res);
         }
     });
@@ -133,54 +135,83 @@ document.querySelector('#vehicle-list tbody').addEventListener('click', (e) => {
 });
 
 function deleteVehicle(vehicleId) {
-    if (!confirm(`Are you sure you want to delete the vehicle with ID ${vehicleId}?`)) return;
-
-    $.ajax({
-        url: `http://localhost:8082/cms/api/v1/vehicles/${vehicleId}`,
-        type: "DELETE",
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
-        },
-        success: (res) => {
-            console.log("Vehicle deleted successfully:", res);
-            initializeVehicle();
-        },
-        error: (err) => {
-            console.error("Error deleting vehicle:", err);
+    Swal.fire({
+        title: `Are you sure?`,
+        text: `Are you sure you want to delete the vehicle with ID ${vehicleId}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `http://localhost:8082/cms/api/v1/vehicles/${vehicleId}`,
+                type: "DELETE",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                success: (res) => {
+                    Swal.fire(
+                        'Deleted!',
+                        `The vehicle with ID ${vehicleId} has been deleted successfully.`,
+                        'success'
+                    );
+                    initializeVehicle();
+                },
+                error: (err) => {
+                    console.error("Error deleting vehicle:", err);
+                    toastr.error("cannot delete vehicle");
+                }
+            });
         }
     });
+
 }
 
 let updateVehicleId = null;
 
 function editVehicle(vehicleId) {
-    if (!confirm(`Are you sure you want to edit the vehicle with ID ${vehicleId}?`)) return;
-    updateVehicleId = vehicleId;
+    Swal.fire({
+        title: `Are you sure?`,
+        text: `You are about to edit the vehicle with ID ${vehicleId}.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, edit it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            updateVehicleId = vehicleId;
 
-    $('#updateVehicleBtn').css('display', 'inline');
+            $('#updateVehicleBtn').css('display', 'inline');
 
-    $.ajax({
-        url: `http://localhost:8082/cms/api/v1/vehicles/${vehicleId}`,
-        type: "GET",
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
-        },
-        success: (res) => {
-            console.log("Vehicle data fetched successfully:", res);
+            $.ajax({
+                url: `http://localhost:8082/cms/api/v1/vehicles/${vehicleId}`,
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                success: (res) => {
+                    document.getElementById('licenNo').value = res.licenNo;
+                    document.getElementById('category').value = res.category;
+                    document.getElementById('fuelType').value = res.fuelType;
+                    document.getElementById('vehicleStatus').value = res.vehicleStatus;
 
-            document.getElementById('licenNo').value = res.licenNo;
-            document.getElementById('category').value = res.category;
-            document.getElementById('fuelType').value = res.fuelType;
-            document.getElementById('vehicleStatus').value = res.vehicleStatus;
+                    $('#staffIdOnVehicle').val(res.staffId || 'Select Staff');
 
-            $('#staffIdOnVehicle').val(res.staffId || 'Select Staff');
+                    document.getElementById('remark').value = res.remark || "";
 
-            document.getElementById('remark').value = res.remark || "";
-        },
-        error: (err) => {
-            console.error("Error fetching vehicle data:", err);
+                },
+                error: (err) => {
+                    toastr.error("cannot edit vehicle");
+                }
+            });
         }
     });
+
 }
 
 
@@ -216,8 +247,10 @@ $('#updateVehicleBtn').on('click', function() {
         success: (res) => {
             console.log(res);
             initializeVehicle();
+            swal.fire('Success!', 'Vehicle updated successfully','success');
         },
         error: (res) => {
+            toastr.error("cannot update vehicle");
             console.error(res);
         }
     });
