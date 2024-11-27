@@ -8,5 +8,6 @@
     <orderEntry type="library" name="dataTables" level="application" />
     <orderEntry type="library" name="dropzone" level="application" />
     <orderEntry type="library" name="toastr.js" level="application" />
+    <orderEntry type="library" name="leaflet" level="application" />
   </component>
 </module>

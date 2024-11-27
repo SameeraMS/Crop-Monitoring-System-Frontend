@@ -64,7 +64,6 @@ function loadCropTable() {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            $('#crop-list').DataTable().destroy();
             $('#crop-list tbody').empty();
             res.forEach(crop => {
                 addCropToTable(crop);

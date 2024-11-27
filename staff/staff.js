@@ -52,7 +52,6 @@ function loadStaffTable() {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            $('#staff-list').DataTable().destroy();
             $('#staff-list tbody').empty();
             res.forEach(staff => {
                 addStaffToTable(staff);
@@ -197,7 +196,8 @@ function addStaffToTable(staff) {
     row.innerHTML = `
         <td>${staff.staffId}</td>
         <td>${staff.firstName}</td>
-        <td>${staff.email}</td>
+        <td>${staff.designation}</td>
+        <td>${staff.gender}</td>
         <td>${staff.role}</td>
         <td><button value="${staff.staffId}" class="edit-btn">Edit</button></td>
         <td><button value="${staff.staffId}" class="delete-btn">Delete</button></td>
