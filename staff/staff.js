@@ -37,7 +37,7 @@ function loadFieldIds() {
             });
         },
         error: (res) => {
-            toast.error("cannot load field ids");
+            toastr.error("cannot load field ids");
             console.error(res);
         }
     });
@@ -56,10 +56,10 @@ function loadStaffTable() {
             res.forEach(staff => {
                 addStaffToTable(staff);
             });
-            new DataTable("#staff-list", {paging: false, pageLength: 100, destroy: true});
+            new DataTable("#staff-list", {paging: true, pageLength: 10, destroy: true});
         },
         error: (res) => {
-            toast.error("cannot load staff table");
+            toastr.error("cannot load staff table");
             console.error(res);
         }
     });
@@ -111,6 +111,18 @@ document.getElementById('staff-form').addEventListener('submit', function(e) {
     let logId = document.getElementById('logIdStaff').value;
     let fieldId = document.getElementById('fieldIdOnStaff').value;
 
+    if (/^\d+$/.test(postalcode)) {
+    } else {
+        toastr.error('Postal code is not a valid number.');
+        return
+    }
+
+    if (/^(0\d{9}|\+94\d{9})$/.test(contactNo)) {
+    } else {
+        toastr.error('Invalid contact number. Please enter a valid format.');
+        return;
+    }
+
     if (logId === 'Select Log') {
         logId = null
     }
@@ -156,7 +168,7 @@ document.getElementById('staff-form').addEventListener('submit', function(e) {
         error: (res) => {
             console.error(res);
             initializeStaff()
-            toast.error("cannot save staff");
+            toastr.error("cannot save staff");
         }
     });
 
@@ -179,11 +191,11 @@ function saveStaffAndField(staffId, fieldId) {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
-            toast.success("Staff and field saved successfully");
+            toastr.success("Staff and field saved successfully");
             console.log(res);
         },
         error: (res) => {
-            toast.error("cannot save staff and field");
+            toastr.error("cannot save staff and field");
             console.error(res);
         }
     });
@@ -247,7 +259,7 @@ function deleteStaff(staffId) {
                     addStaffInOthers();
                 },
                 error: (err) => {
-                    toast.error("cannot delete staff");
+                    toastr.error("cannot delete staff");
                     console.error('Error deleting staff:', err);
                 }
             });
@@ -300,7 +312,7 @@ function editStaff(staffId) {
                 },
                 error: (err) => {
                     console.error('Error fetching staff details:', err);
-                    toast.error("cannot fetch staff");
+                    toastr.error("cannot fetch staff");
                 }
             });
         }
@@ -335,6 +347,15 @@ $('#updateStaffBtn').on('click', () => {
     const role = document.getElementById('role').value;
     let logId = document.getElementById('logIdStaff').value;
 
+    if (/^\d+$/.test(postalcode)) {
+    } else {
+        toastr.error('Postal code is not a valid number.');
+    }
+
+    if (/^(0\d{9}|\+94\d{9})$/.test(contactNo)) {
+    } else {
+        toastr.error('Invalid contact number. Please enter a valid format.');
+    }
 
     if (logId === 'Select Log') {
         logId = null
@@ -372,7 +393,7 @@ $('#updateStaffBtn').on('click', () => {
             swal.fire('Success', 'Staff updated successfully', 'success');
         },
         error: (res) => {
-            toast.error("cannot update staff");
+            toastr.error("cannot update staff");
             console.error(res);
         }
     });

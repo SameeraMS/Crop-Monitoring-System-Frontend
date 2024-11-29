@@ -24,6 +24,18 @@ function getUserDetails() {
             document.getElementById('profile').textContent = userRole;
             userPassword = response.password;
             document.getElementById('roleForSettings').value = userRole;
+
+            if (userRole === 'ADMINISTRATIVE') {
+                $('#crop_nav').css('display', 'none');
+                $('#fields_nav').css('display', 'none');
+                $('#log_nav').css('display', 'none');
+            }
+
+            if (userRole === 'SCIENTIST') {
+                $('#vehicle_nav').css('display', 'none');
+                $('#staff_nav').css('display', 'none');
+                $('#equipment_nav').css('display', 'none');
+            }
         },
         error: function (error) {
             toast.error("cannot fetch user details");

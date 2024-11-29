@@ -170,6 +170,38 @@
     margin-bottom: 20px;
 }
 
+.pagination{
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+
+}
+
+.pagination li {
+    display: inline;
+    margin: 0 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+}
+
+.pagination li.active {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.pagination li button {
+    background-color: transparent;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
 .form-group {
     margin-bottom: 1.5rem;
 }

@@ -68,7 +68,7 @@ function loadCropTable() {
             res.forEach(crop => {
                 addCropToTable(crop);
             });
-            new DataTable("#crop-list", {paging: false, pageLength: 100, destroy: true});
+            new DataTable("#crop-list", {paging: true, pageLength: 10, destroy: true});
         },
         error: (res) => {
             console.error(res);

@@ -127,7 +127,7 @@ function loadLogTable() {
             res.forEach(log => {
                 addLogToTable(log);
             });
-            new DataTable("#log-list", {paging: false, pageLength: 100, destroy: true});
+            new DataTable("#log-list", {paging: true, pageLength: 10, destroy: true});
         },
         error: (res) => {
             toastr.error("cannot load log table");
@@ -199,11 +199,12 @@ function deleteLog(logId) {
                     );
 
                     console.log('Log deleted successfully:', res);
-                    initializeLog();
-                    reloadAll();
+                    reloadAll()
+                    initializeLog()
+
                 },
                 error: (err) => {
-                    toastr.error("cannot delete log");
+                    toastr.error("cannot delete log it is used in another table");
                     console.error('Error deleting log:', err);
                 }
             });

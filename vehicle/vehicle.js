@@ -50,7 +50,7 @@ function loadVehicleTable() {
             res.forEach(vehicle => {
                 addVehicleToTable(vehicle);
             });
-            new DataTable("#vehicle-list", {paging: false, pageLength: 100, destroy: true});
+            new DataTable("#vehicle-list", {paging: true, pageLength: 10, destroy: true});
         },
         error: (res) => {
             toastr.error("cannot load vehicle table");

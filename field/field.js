@@ -69,7 +69,7 @@ function loadFieldTable() {
             res.forEach(field => {
                 addFieldToTable(field);
             });
-            new DataTable("#field-list", {paging: false, pageLength: 100, destroy: true});
+            new DataTable("#field-list", {paging: true, pageLength: 10, destroy: true});
         },
         error: (res) => {
             toastr.error("cannot load fields");
