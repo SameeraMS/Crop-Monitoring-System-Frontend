@@ -123,6 +123,7 @@ function loadLogTable() {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
+            $('#log-list').DataTable().destroy();
             $('#log-list tbody').empty();
             res.forEach(log => {
                 addLogToTable(log);

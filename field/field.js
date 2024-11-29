@@ -65,6 +65,7 @@ function loadFieldTable() {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
+            $('#field-list').DataTable().destroy();
             $('#field-list tbody').empty();
             res.forEach(field => {
                 addFieldToTable(field);

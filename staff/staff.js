@@ -52,6 +52,7 @@ function loadStaffTable() {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
+            $('#staff-list').DataTable().destroy();
             $('#staff-list tbody').empty();
             res.forEach(staff => {
                 addStaffToTable(staff);

@@ -46,6 +46,7 @@ function loadVehicleTable() {
             "Authorization": "Bearer " + localStorage.getItem('token')
         },
         success: (res) => {
+            $('#vehicle-list').DataTable().destroy();
             $('#vehicle-list tbody').empty();
             res.forEach(vehicle => {
                 addVehicleToTable(vehicle);
