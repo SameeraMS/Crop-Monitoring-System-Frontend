@@ -1,5 +1,6 @@
 import {initializeEquipment} from "../equipment/equipment.js";
 import {initializeVehicle} from "../vehicle/vehicle.js";
+import {getToken} from "../home/home.js";
 
 
 initializeStaff()
@@ -22,7 +23,7 @@ function loadFieldIds() {
         url: "http://localhost:8082/cms/api/v1/fields",
         type: "GET",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             const fieldIds = res.map(field => field.fieldId);
@@ -49,7 +50,7 @@ function loadStaffTable() {
         url: "http://localhost:8082/cms/api/v1/staffs",
         type: "GET",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             $('#staff-list').DataTable().destroy();
@@ -72,7 +73,7 @@ function loadLogIds() {
         url: "http://localhost:8082/cms/api/v1/logs",
         type: "GET",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             const logIds = res.map(log => log.logId);
@@ -156,7 +157,7 @@ document.getElementById('staff-form').addEventListener('submit', function(e) {
         data: JSON.stringify(staff),
         contentType: "application/json",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             if (fieldId != null) {
@@ -189,7 +190,7 @@ function saveStaffAndField(staffId, fieldId) {
         contentType: false,
         processData: false,
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             toastr.success("Staff and field saved successfully");
@@ -210,6 +211,7 @@ function addStaffToTable(staff) {
         <td>${staff.staffId}</td>
         <td>${staff.firstName}</td>
         <td>${staff.designation}</td>
+        <td>${staff.contactNo}</td>
         <td>${staff.gender}</td>
         <td>${staff.role}</td>
         <td><button value="${staff.staffId}" class="edit-btn">Edit</button></td>
@@ -247,7 +249,7 @@ function deleteStaff(staffId) {
                 url: `http://localhost:8082/cms/api/v1/staffs/${staffId}`,
                 type: "DELETE",
                 headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('token')
+                    "Authorization": "Bearer " + getToken()
                 },
                 success: (res) => {
                     Swal.fire(
@@ -287,7 +289,7 @@ function editStaff(staffId) {
                 url: `http://localhost:8082/cms/api/v1/staffs/${staffId}`,
                 type: "GET",
                 headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('token')
+                    "Authorization": "Bearer " + getToken()
                 },
                 success: (res) => {
                     console.log('Staff details fetched:', res);
@@ -386,7 +388,7 @@ $('#updateStaffBtn').on('click', () => {
         data: JSON.stringify(staff),
         contentType: "application/json",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             initializeStaff()

@@ -1,3 +1,4 @@
+import {getToken} from "../home/home.js";
 
 let userEmail = localStorage.getItem('user');
 let userRole = null;
@@ -17,7 +18,7 @@ function getUserDetails() {
         url: "http://localhost:8082/cms/api/v1/users/" + userEmail,
         type: "GET",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: function (response) {
             userRole = response.role;
@@ -67,7 +68,7 @@ $('#saveSettingsBtn').on('click', function (e) {
         type: "PUT",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         data: JSON.stringify(user),
         success: function (response) {
@@ -123,7 +124,7 @@ $('#changePasswordBtn').on('click', function (e) {
                 type: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Bearer " + localStorage.getItem('token')
+                    "Authorization": "Bearer " + getToken()
                 },
                 data: JSON.stringify(user),
                 success: function (response) {
@@ -179,7 +180,7 @@ $('#deleteAccountBtn').on('click', function (e) {
                 url: "http://localhost:8082/cms/api/v1/users/" + userEmail,
                 type: "DELETE",
                 headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('token')
+                    "Authorization": "Bearer " + getToken()
                 },
                 success: function (response) {
                     swal.fire('Success!', 'Account deleted successfully', 'success');

@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { "Content-Type": "application/json" },
                 success: (response) => {
                     document.cookie = "token=" + response.token;
-                    localStorage.setItem('token', response.token);
                     localStorage.setItem('user', email);
                     toastr.success('welcome to the system!', 'Login successful!');
                     setTimeout(() => {
@@ -113,7 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { "Content-Type": "application/json" },
                 success: (response) => {
                     document.cookie = "token=" + response.token;
-                    localStorage.setItem('token', response.token);
                     localStorage.setItem('user', email);
                     toastr.success('welcome to the system!', 'Signup successful!');
                     setTimeout(() => {

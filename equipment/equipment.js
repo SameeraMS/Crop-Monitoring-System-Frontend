@@ -1,3 +1,5 @@
+import {getToken} from "../home/home.js";
+
 initializeEquipment();
 
 export function initializeEquipment() {
@@ -12,7 +14,7 @@ function loadFieldOnEquipment() {
         url: "http://localhost:8082/cms/api/v1/fields",
         type: "GET",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             const fieldSelect = document.getElementById('fieldIdOnEquipment');
@@ -36,7 +38,7 @@ function loadStaffOnEquipment() {
         url: "http://localhost:8082/cms/api/v1/staffs",
         type: "GET",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             const staffSelect = document.getElementById('staffIdOnEquipment');
@@ -60,7 +62,7 @@ function loadEquipmentTable() {
         url: "http://localhost:8082/cms/api/v1/equipments",
         type: "GET",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             $('#equipment-list').DataTable().destroy();
@@ -105,7 +107,7 @@ document.getElementById('equipment-form').addEventListener('submit', function(e)
         url: "http://localhost:8082/cms/api/v1/equipments",
         type: "POST",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         data: JSON.stringify(equipment),
         contentType: "application/json",
@@ -178,7 +180,7 @@ function deleteEquipment(equipmentId) {
                 url: `http://localhost:8082/cms/api/v1/equipments/${equipmentId}`,
                 type: "DELETE",
                 headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('token')
+                    "Authorization": "Bearer " + getToken()
                 },
                 success: (res) => {
                     Swal.fire(
@@ -220,7 +222,7 @@ function editEquipment(equipmentId) {
                 url: `http://localhost:8082/cms/api/v1/equipments/${equipmentId}`,
                 type: "GET",
                 headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('token')
+                    "Authorization": "Bearer " + getToken()
                 },
                 success: (res) => {
                     document.getElementById('equipmentName').value = res.equipmentName;
@@ -268,7 +270,7 @@ $('#updateEquipmentBtn').on('click', () => {
         url: "http://localhost:8082/cms/api/v1/equipments/" + updateEquipmentId,
         type: "PUT",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         data: JSON.stringify(equipment),
         contentType: "application/json",

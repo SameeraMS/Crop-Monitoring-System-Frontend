@@ -11,3 +11,8 @@ function updateTime() {
 setInterval(updateTime, 1000);
 
 updateTime();
+
+
+export function getToken() {
+    return document.cookie.split('; ').find(cookie => cookie.startsWith('token='))?.split('=')[1];
+}

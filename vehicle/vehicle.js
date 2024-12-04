@@ -1,3 +1,4 @@
+import {getToken} from "../home/home.js";
 
 
 initializeVehicle();
@@ -13,7 +14,7 @@ function loadStaffOnVehicle() {
         url: "http://localhost:8082/cms/api/v1/staffs",
         type: "GET",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             const staffIds = res.map(staff => staff.staffId);
@@ -43,7 +44,7 @@ function loadVehicleTable() {
         url: "http://localhost:8082/cms/api/v1/vehicles",
         type: "GET",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             $('#vehicle-list').DataTable().destroy();
@@ -87,7 +88,7 @@ document.getElementById('vehicle-form').addEventListener('submit', function(e) {
         url: "http://localhost:8082/cms/api/v1/vehicles",
         type: "POST",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         data: JSON.stringify(vehicle),
         contentType: "application/json",
@@ -150,7 +151,7 @@ function deleteVehicle(vehicleId) {
                 url: `http://localhost:8082/cms/api/v1/vehicles/${vehicleId}`,
                 type: "DELETE",
                 headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('token')
+                    "Authorization": "Bearer " + getToken()
                 },
                 success: (res) => {
                     Swal.fire(
@@ -192,7 +193,7 @@ function editVehicle(vehicleId) {
                 url: `http://localhost:8082/cms/api/v1/vehicles/${vehicleId}`,
                 type: "GET",
                 headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('token')
+                    "Authorization": "Bearer " + getToken()
                 },
                 success: (res) => {
                     document.getElementById('licenNo').value = res.licenNo;
@@ -240,7 +241,7 @@ $('#updateVehicleBtn').on('click', function() {
         url: "http://localhost:8082/cms/api/v1/vehicles/" + updateVehicleId,
         type: "PUT",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         data: JSON.stringify(vehicle),
         contentType: "application/json",

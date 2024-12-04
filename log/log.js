@@ -1,6 +1,7 @@
 import { initializeStaff } from "../staff/staff.js";
 import { initializeField } from "../field/field.js";
 import { initializeCrop } from "../crop/crop.js";
+import {getToken} from "../home/home.js";
 
 initializeLog();
 
@@ -62,7 +63,7 @@ document.getElementById('log-form').addEventListener('submit', function(e) {
         data: jsonLog,
         headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             var logId = res.logId;
@@ -97,7 +98,7 @@ function saveImage(logId, image) {
             contentType: false,
             processData: false,
             headers: {
-                "Authorization": "Bearer " + localStorage.getItem('token')
+                "Authorization": "Bearer " + getToken()
             },
             success: (res) => {
                 toastr.success("Log image saved successfully");
@@ -120,7 +121,7 @@ function loadLogTable() {
         url: "http://localhost:8082/cms/api/v1/logs",
         type: "GET",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             $('#log-list').DataTable().destroy();
@@ -190,7 +191,7 @@ function deleteLog(logId) {
                 url: `http://localhost:8082/cms/api/v1/logs/${logId}`,
                 type: "DELETE",
                 headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('token')
+                    "Authorization": "Bearer " + getToken()
                 },
                 success: (res) => {
                     Swal.fire(
@@ -276,7 +277,7 @@ $('#updateLogBtn').on('click', () => {
         url: "http://localhost:8082/cms/api/v1/logs/" + updateLogId,
         type: "PUT",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         data: JSON.stringify(log),
         contentType: "application/json",

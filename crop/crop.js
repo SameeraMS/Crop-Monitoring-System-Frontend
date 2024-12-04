@@ -1,3 +1,4 @@
+import {getToken} from "../home/home.js";
 
 initializeCrop();
 
@@ -13,7 +14,7 @@ function loadLogIdsOnCrop() {
         url: "http://localhost:8082/cms/api/v1/logs",
         type: "GET",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             const logSelect = document.getElementById('logIdOnCrop');
@@ -37,7 +38,7 @@ function loadFieldIdOnCrop() {
         url: "http://localhost:8082/cms/api/v1/fields",
         type: "GET",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             const fieldSelect = document.getElementById('fieldIdOnCrop');
@@ -61,7 +62,7 @@ function loadCropTable() {
         url: "http://localhost:8082/cms/api/v1/crops",
         type: "GET",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             $('#crop-list').DataTable().destroy();
@@ -105,7 +106,7 @@ function saveCropImage(cropId, image) {
             contentType: false,
             processData: false,
             headers: {
-                "Authorization": "Bearer " + localStorage.getItem('token')
+                "Authorization": "Bearer " + getToken()
             },
             success: (res) => {
                 console.log(res);
@@ -172,7 +173,7 @@ document.getElementById('crop-form').addEventListener('submit', function(e) {
         url: "http://localhost:8082/cms/api/v1/crops",
         type: "POST",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         data: JSON.stringify(crop),
         contentType: "application/json",
@@ -256,7 +257,7 @@ function deleteCrop(cropId) {
                 url: `http://localhost:8082/cms/api/v1/crops/${cropId}`,
                 type: "DELETE",
                 headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('token')
+                    "Authorization": "Bearer " + getToken()
                 },
                 success: (res) => {
                     Swal.fire(
@@ -312,7 +313,7 @@ function editCrop(cropId) {
                 url: `http://localhost:8082/cms/api/v1/crops/${cropId}`,
                 type: "GET",
                 headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('token')
+                    "Authorization": "Bearer " + getToken()
                 },
                 success: (res) => {
                     console.log("Crop data fetched successfully:", res);
@@ -399,7 +400,7 @@ $('#updateCropBtn').on('click', function() {
         url: "http://localhost:8082/cms/api/v1/crops/" + updateCropId,
         type: "PUT",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         data: JSON.stringify(crop),
         contentType: "application/json",

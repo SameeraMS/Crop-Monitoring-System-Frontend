@@ -1,6 +1,7 @@
 import {initializeCrop} from "../crop/crop.js";
 import {initializeStaff} from "../staff/staff.js";
 import {initializeEquipment} from "../equipment/equipment.js";
+import {getToken} from "../home/home.js";
 
 initializeField();
 
@@ -62,7 +63,7 @@ function loadFieldTable() {
         url: "http://localhost:8082/cms/api/v1/fields",
         type: "GET",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             $('#field-list').DataTable().destroy();
@@ -94,7 +95,7 @@ function saveFieldImage(fieldId, image1, image2) {
             contentType: false,
             processData: false,
             headers: {
-                "Authorization": "Bearer " + localStorage.getItem('token')
+                "Authorization": "Bearer " + getToken()
             },
             success: (res) => {
                 console.log(res);
@@ -118,7 +119,7 @@ function loadLogIdsOnField() {
         url: "http://localhost:8082/cms/api/v1/logs",
         type: "GET",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         success: (res) => {
             const logIdSelect = document.getElementById('logIdOnField');
@@ -191,7 +192,7 @@ $('#saveFieldBtn').on('click', (e) => {
         url: "http://localhost:8082/cms/api/v1/fields",
         type: "POST",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         data: JSON.stringify(field),
         contentType: "application/json",
@@ -293,7 +294,7 @@ function deleteField(fieldId) {
                 url: `http://localhost:8082/cms/api/v1/fields/${fieldId}`,
                 type: "DELETE",
                 headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('token')
+                    "Authorization": "Bearer " + getToken()
                 },
                 success: (res) => {
                     Swal.fire(
@@ -335,7 +336,7 @@ function editField(fieldId) {
                 url: `http://localhost:8082/cms/api/v1/fields/${fieldId}`,
                 type: "GET",
                 headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('token')
+                    "Authorization": "Bearer " + getToken()
                 },
                 success: (res) => {
                     document.getElementById('fieldName').value = res.fieldName;
@@ -404,7 +405,7 @@ $('#updateFieldBtn').on('click', () => {
         url: "http://localhost:8082/cms/api/v1/fields/" + updateFieldId,
         type: "PUT",
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('token')
+            "Authorization": "Bearer " + getToken()
         },
         data: JSON.stringify(field),
         contentType: "application/json",
